@@ -1,0 +1,268 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,600italic,600,300italic,700);
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300italic,300,400italic,500,500italic);
+
+body{
+	font-family: 'Roboto', sans-serif;
+	font-weight: 500;
+	background: #FFDA87;
+	font-size:14px;
+	//background: -webkit-linear-gradient(90deg, #005C97 10%, #363795 90%); /* Chrome 10+, Saf5.1+ */
+	//background:    -moz-linear-gradient(90deg, #005C97 10%, #363795 90%); /* FF3.6+ */
+	//background:     -ms-linear-gradient(90deg, #005C97 10%, #363795 90%); /* IE10 */
+	//background:      -o-linear-gradient(90deg, #005C97 10%, #363795 90%); /* Opera 11.10+ */
+	//background:         linear-gradient(90deg, #005C97 10%, #363795 90%); /* W3C */
+}
+.system-message-success-tick{
+	background: lightgreen;
+	color:steelblue;
+	border-radius: 50%;
+	padding:4px 8px;
+	margin-right:10px;
+	display: inline-block;
+}
+.system-message-tick{
+	background: lightpink;
+	color:red;
+	border-radius: 50%;
+	padding:4px 8px;
+	margin-right:10px;
+	display: inline-block;
+}
+.loginBox{
+	width: 400px;
+	margin: auto;
+	margin-top:8%;
+}
+
+.small{
+	font-size: small;
+}
+
+.company-logo img{
+ height:250px;
+ width:100%;
+}
+
+.menu-active,.not-active:hover{
+	background: #FFDA87 !important;
+}
+
+.menu-active a, .not-active:hover{
+	color:white !important;
+
+}
+
+h1{
+	padding:20px;
+	color:#282E34;
+	font-weight: 300;
+	text-shadow: 2px 3px 2px grey !important;
+}
+
+.system-message{
+	padding: 15px;
+    border: 1px solid #808080;
+    border-radius: 4px;
+		top:15px;
+		position: relative;
+}
+.profile-container{
+	background: white;
+	box-shadow: 0 0 20px black;
+	//margin-top:100px;
+	clear: both;
+	width:100%;
+	padding-left:0px;
+	padding-right:0px;
+}
+
+.list-group{
+	box-shadow: none !important;
+}
+
+.profile-top-right-menu{
+	list-style: none;
+	float: right;
+	right:100px;
+	top:10px;
+	position: relative;
+}
+.logo{
+	margin-left: 70px;
+	height:100px;
+	width: auto;
+	top: 10px;
+	position: relative;
+}
+
+
+hr{
+	border-top:1px solid lightgrey;
+}
+
+.little_top{
+	bottom:2px;
+	position: relative;
+}
+
+#loginFooter{
+	height: 50px;
+	position: relative;
+	width: 100%;
+	clear: both;
+	background: #FFDA87;
+	text-align: center;
+}
+
+.logoDiv h1{
+	display: inline-block;
+	color: tomato;
+	padding-left: 0px;
+	font-family: fantasy;
+}
+
+.logoDiv a{
+	text-decoration: none;
+}
+
+.logoDiv i{
+	margin-left: 165px;
+	bottom: 35px;
+	position: relative;
+	color: white;
+	font-weight: 300;
+}
+
+.container{
+	min-height:650px;
+}
+.logoDivExtra{
+	float:left;
+	height:120px;
+}
+
+.logoDivExtra h1{
+	padding-top:0px;
+}
+
+nav{
+
+	//border-bottom:2px solid tomato;
+	height:100px;
+	position: relative;
+	width:100%;
+	//background: -webkit-linear-gradient(90deg, #005C97 10%, #363795 90%); /* Chrome 10+, Saf5.1+ */
+	//background:    -moz-linear-gradient(90deg, #005C97 10%, #363795 90%); /* FF3.6+ */
+	//background:     -ms-linear-gradient(90deg, #005C97 10%, #363795 90%); /* IE10 */
+	//background:      -o-linear-gradient(90deg, #005C97 10%, #363795 90%); /* Opera 11.10+ */
+	//background:         linear-gradient(90deg, #005C97 10%, #363795 90%); /* W3C */
+	clear: both;
+	background: #FFDA87;
+}
+
+.profile-nav{
+	height: 50px;
+	position: relative;
+	width: 100%;
+	clear: both;
+	background: #FFDA87;
+	box-shadow: 0 0 10px !important;
+	z-index: 501;
+
+}
+
+.changePasswordDiv{
+	display: none;
+}
+
+th{
+	font-weight:500;
+	letter-spacing:-1px;
+	background:#167F92 !important;
+	color:white;
+	border-top:0px !important;
+}
+
+table th:nth-child(1){
+	border-radius:10px 0px 0 0;
+}
+
+table th:nth-last-child(1){
+	border-radius:0 10px 0px 0px;
+}
+
+table{
+	font-size:14px;
+}
+
+tr:nth-child(1){
+	border-top:0px;
+}
+
+.profile-footer{
+	height: 50px;
+	position: relative;
+	width: 100%;
+	clear: both;
+	background: #FFDA87;
+	box-shadow: 0 0 10px !important;
+	z-index: 501;
+	padding:15px !important;
+	box-shadow:0 0 10px !important;
+	z-index: 501 !important;
+}
+
+.list-group-item{
+	border:0px !important;
+	-webkit-border-radius:0px !important;
+	-moz-border-radius:0px !important;
+	border-radius:0px !important;
+}
+
+.sidebar{
+	padding: 0px;
+	min-height: 900px;
+	box-shadow: 0 0 4px;
+	z-index:300;
+}
+
+.sidebar, .col-md-10{
+	min-height:900px;
+}
+
+.backend-system-admin-comp-logo{
+	border-radius: 50%;
+	padding: 15px;
+	text-align: center;
+	width: 108px;
+	margin: auto;
+	box-shadow: 0 0 5px;
+	margin-bottom: 10px;
+	margin-top: 10px;
+}
+
+.sys-logo{
+	height: 80px;
+	width: auto;
+	position: relative;
+}
+
+.col-md-10{
+	background:#EEEEEE;
+}
+
+label{
+	margin-top:5px;
+}
+
+.datepicker td, .datepicker th{
+	padding:10px;
+	border-radius:0px !important;
+}
+
+.datepicker th{
+	background:white !important;
+}
+.datepicker_header{
+	background:white !important;
+}
