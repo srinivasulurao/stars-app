@@ -1,4 +1,4 @@
-<html>
+<html itemscope itemtype="http://schema.org/QAPage">
 <head>
 <!-- CSS FILES-->
 <?php

@@ -23,15 +23,18 @@ echo view('profile.sidebar',array('active_link'=>'Seating Chart'));
     <h1>Seating Arrangements <a download="Sample-Seating-Arrangement.csv" href='<?php echo $sample_csv_file; ?>' class="btn btn-primary" style="float:right">Download Sample CSV File</a></h1>
 
     <table class='table table-striped'>
-        <tr><th>Vehicle Picture</th><th>Vehicle Name</th><th>Vehicle No.</th><th>Action</th></tr>
+        <tr><th>Vehicle Picture</th><th>Vehicle Name</th><th>Vehicle No.</th><th>Seat Arrangement CSV<th>Action</th></tr>
         <?php
         $root=Request::root();
         foreach($results as $key):
-            $pic_url=str_replace("/public","",Request::root().$key->vehicle_image);
-            $pic="<img src='$pic_url' class='thumbnail' style='height:70px;width:70px;border-radius: 50%'>";
-            $view="<a href='$root/system-admin/seating-chart/view/{$key->vehicle_id}' class='btn btn-info'>View</a>";
-
-            echo "<tr><td>$pic</td><td>{$key->vehicle_name}</td><td>{$key->vehicle_no}</td><td>$view</td></tr>";
+            if($key->seat_arrangement_csv):
+                $pic_url=str_replace("/public","",Request::root().$key->vehicle_image);
+                $seat_arrangement_csv=str_replace("/public","",Request::root().$key->seat_arrangement_csv);
+                $pic="<img src='$pic_url' class='thumbnail' style='height:70px;width:70px;border-radius: 50%'>";
+                $view_seat="<a href='$root/system-admin/seating-chart/view/{$key->vehicle_id}' class='btn btn-info'>View Arrangement</a>";
+                $view_csv="<a href='$seat_arrangement_csv' class='label label-success' download>View</a>";
+                echo "<tr><td>$pic</td><td>{$key->vehicle_name}</td><td>{$key->vehicle_no}</td><td>$view_csv</td><td>$view_seat</td></tr>";
+            endif;
         endforeach;
         ?>
     </table>

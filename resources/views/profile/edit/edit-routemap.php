@@ -37,9 +37,9 @@ echo View::make('profile.header',array('title'=>$title));
             <?php echo Form::text('route_end_latitude', $result->route_end_latitude,array('class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('Route End Longitude', 'Route End Longitude'); ?>
             <?php echo Form::text('route_end_longitude', $result->route_end_longitude,array('class'=>"form-control","required"=>"required")); ?>
-
-
-            <?php echo Form::label('Route Map Attachments', 'Route Map Attachments'); ?>
+            <?php echo Form::label('Route Type', 'Route Type'); ?>
+            <?php echo Form::select('route_type',getRouteTypeDropDown(),$result->route_type,array('class'=>"form-control","required"=>"required")); ?>
+            <?php echo Form::label('Route Map Attachments', 'Route Map Attachments (Use CTRL + to multi-select attachments)'); ?>
             <?php echo Form::file('route_map_attachment[]',array('multiple'=>"multiple")); ?>
             <ul class="list-group" style="margin-top:10px;">
             <?php

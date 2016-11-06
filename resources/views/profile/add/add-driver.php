@@ -29,6 +29,8 @@ echo View::make('profile.header',array('title'=>$title));
             <?php echo Form::text('last_name','',array('class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('email', 'E-Mail Address'); ?>
             <?php echo Form::text('email', '',array('class'=>"form-control","required"=>"required")); ?>
+            <?php echo Form::label('Password', 'Password'); ?>
+            <?php echo Form::password('password',array('class'=>"form-control","autocomplete"=>"off")); ?>
             <?php echo Form::label('Total Experience', 'Total Experience'); ?>
             <?php echo Form::text('total_exp','',array('class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('About Driver', 'About Driver'); ?>
@@ -40,13 +42,13 @@ echo View::make('profile.header',array('title'=>$title));
             <?php echo Form::label('Address', 'Address'); ?>
             <?php echo Form::textarea('address', '',array('class'=>"form-control","required"=>"required","rows"=>5)); ?>
             <?php echo Form::label('District', 'District'); ?>
-            <?php echo Form::text('district', '',array('class'=>"form-control","required"=>"required")); ?>
+            <?php echo Form::select('district_id',getDistrictsDropDown(),'',array('class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('School', 'School'); ?>
             <?php echo Form::select('school_id',getSchoolsDropDown(),'',array('class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('Phone', 'Phone'); ?>
             <?php echo Form::text('phone','',array('class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('Picture', 'Picture'); ?>
-            <?php echo Form::file('profile_pic'); ?>
+            <?php echo Form::file('profile_pic',array('required'=>"required")); ?>
 
             <?php echo Form::token(); ?><br>
             <?php echo Form::submit('Submit',array('class'=>"btn btn-success","required"=>"required")); ?>

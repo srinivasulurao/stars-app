@@ -32,7 +32,7 @@ echo View::make('profile.header',array('title'=>$title));
             <?php echo Form::label('School Description', 'School Description'); ?>
             <?php echo Form::textarea('school_description','',array('class'=>"form-control","required"=>"required","rows"=>5)); ?>
             <?php echo Form::label('School Picture', 'School Picture'); ?>
-            <?php echo Form::file('school_pic'); ?>
+            <?php echo Form::file('school_pic',array('required'=>'required')); ?>
 
             <?php echo Form::token(); ?><br>
             <?php echo Form::submit('Submit',array('class'=>"btn btn-success","required"=>"required")); ?>

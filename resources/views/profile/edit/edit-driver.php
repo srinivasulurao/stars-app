@@ -29,6 +29,8 @@ echo View::make('profile.header',array('title'=>$title));
             <?php echo Form::text('last_name', $result->last_name,array('class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('email', 'E-Mail Address'); ?>
             <?php echo Form::text('email', $result->email,array('class'=>"form-control","required"=>"required")); ?>
+            <?php echo Form::label('Password', 'Password'); ?>
+            <?php echo Form::password('password',array('class'=>"form-control","autocomplete"=>"off")); ?>
             <?php echo Form::label('Total Experience', 'Total Experience'); ?>
             <?php echo Form::text('total_exp', $result->total_exp,array('class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('About Driver', 'About Driver'); ?>
@@ -40,7 +42,7 @@ echo View::make('profile.header',array('title'=>$title));
             <?php echo Form::label('Address', 'Address'); ?>
             <?php echo Form::textarea('address', $result->address,array('class'=>"form-control","required"=>"required","rows"=>5)); ?>
             <?php echo Form::label('District', 'District'); ?>
-            <?php echo Form::text('district', $result->district,array('class'=>"form-control","required"=>"required")); ?>
+            <?php echo Form::select('district_id',getDistrictsDropDown(),$result->district_id,array('class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('School', 'School'); ?>
             <?php echo Form::select('school_id',getSchoolsDropDown(),$result->school_id,array('class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('Phone', 'Phone'); ?>

@@ -20,6 +20,6 @@ $localCdn=Request::root();//this is the root url
 <body class='canteen'>
 <nav>
     <span class="logoDiv">
-<a href='<?php echo Request::root(); ?>'><img src='<?php echo $localCdn."/images/logo.png"; ?>' class='logo'><h1>StarsApp</h1><br><i>The best cloud based solution for transportation with security.</i></a>
+<a href='<?php echo Request::root(); ?>'><img src='<?php echo $localCdn."/images/logo.png"; ?>' class='logo'><h1>Student Transportation Accountability & Reporting System</h1><br><i>The best cloud based solution for transportation with security.</i></a>
     </span>
 </nav>

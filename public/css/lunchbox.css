@@ -1,11 +1,14 @@
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,600italic,600,300italic,700);
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300italic,300,400italic,500,500italic);
-
+@import url('https://fonts.googleapis.com/css?family=Merriweather:300,300i,400,400i,700,700i,900,900i');
 body{
-	font-family: 'Roboto', sans-serif;
+	
+	font-family: Merriweather, Georgia, serif;
 	font-weight: 500;
-	background: #FFDA87;
+	//background: #FFDA87;
 	font-size:14px;
+	line-height: 1.75;
+	color:#878787;
 	//background: -webkit-linear-gradient(90deg, #005C97 10%, #363795 90%); /* Chrome 10+, Saf5.1+ */
 	//background:    -moz-linear-gradient(90deg, #005C97 10%, #363795 90%); /* FF3.6+ */
 	//background:     -ms-linear-gradient(90deg, #005C97 10%, #363795 90%); /* IE10 */
@@ -33,6 +36,9 @@ body{
 	margin: auto;
 	margin-top:8%;
 }
+.label{
+	font-size:100% !important;
+}
 
 .small{
 	font-size: small;
@@ -54,9 +60,9 @@ body{
 
 h1{
 	padding:20px;
-	color:#282E34;
+	color: #f1b01d;
 	font-weight: 300;
-	text-shadow: 2px 3px 2px grey !important;
+	//text-shadow: 2px 3px 2px grey !important;
 }
 
 .system-message{
@@ -83,7 +89,7 @@ h1{
 .profile-top-right-menu{
 	list-style: none;
 	float: right;
-	right:100px;
+	right:35px;
 	top:10px;
 	position: relative;
 }
@@ -106,19 +112,23 @@ hr{
 }
 
 #loginFooter{
-	height: 50px;
+	//height: 50px;
 	position: relative;
 	width: 100%;
 	clear: both;
-	background: #FFDA87;
+	padding:10px;
+	color:white;
+	//background: #FFDA87;
+	background: #e8b118 !important;
 	text-align: center;
 }
 
 .logoDiv h1{
-	display: inline-block;
-	color: tomato;
-	padding-left: 0px;
-	font-family: fantasy;
+	    color: #f1b01d;
+    font-size: 25px;
+    font-weight: bold;
+    display: inline-block;
+    text-shadow: none !important;
 }
 
 .logoDiv a{
@@ -126,15 +136,14 @@ hr{
 }
 
 .logoDiv i{
-	margin-left: 165px;
+	margin-left: 185px;
 	bottom: 35px;
 	position: relative;
-	color: white;
 	font-weight: 300;
 }
 
 .container{
-	min-height:650px;
+	min-height:680px;
 }
 .logoDivExtra{
 	float:left;
@@ -157,7 +166,8 @@ nav{
 	//background:      -o-linear-gradient(90deg, #005C97 10%, #363795 90%); /* Opera 11.10+ */
 	//background:         linear-gradient(90deg, #005C97 10%, #363795 90%); /* W3C */
 	clear: both;
-	background: #FFDA87;
+	//background: #FFDA87;
+	background:white;
 }
 
 .profile-nav{
@@ -165,7 +175,7 @@ nav{
 	position: relative;
 	width: 100%;
 	clear: both;
-	background: #FFDA87;
+	background: #FFB547;
 	box-shadow: 0 0 10px !important;
 	z-index: 501;
 
@@ -178,17 +188,18 @@ nav{
 th{
 	font-weight:500;
 	letter-spacing:-1px;
-	background:#167F92 !important;
+	background:#EC971F !important;
 	color:white;
 	border-top:0px !important;
+	padding: 10px;
 }
 
 table th:nth-child(1){
-	border-radius:10px 0px 0 0;
+	//border-radius:10px 0px 0 0;
 }
 
 table th:nth-last-child(1){
-	border-radius:0 10px 0px 0px;
+	//border-radius:0 10px 0px 0px;
 }
 
 table{
@@ -204,7 +215,8 @@ tr:nth-child(1){
 	position: relative;
 	width: 100%;
 	clear: both;
-	background: #FFDA87;
+	//background: #FFDA87;
+	background: #e8b118 !important;
 	box-shadow: 0 0 10px !important;
 	z-index: 501;
 	padding:15px !important;
@@ -222,7 +234,7 @@ tr:nth-child(1){
 .sidebar{
 	padding: 0px;
 	min-height: 900px;
-	box-shadow: 0 0 4px;
+	//box-shadow: 0 0 4px;
 	z-index:300;
 }
 
@@ -265,4 +277,25 @@ label{
 }
 .datepicker_header{
 	background:white !important;
+}
+
+.panel{
+	margin-right:10px !important;
+	margin-left:70px !important;
+}
+
+.panel .badge{
+    font-size:20px;
+    font-weight: 400;
+    display: block;
+    text-align: center;
+    padding:10px;
+    background: #333;
+}
+.badge{
+	border-radius: 4px !important;
+}
+
+td{
+	text-transform: capitalize !important;
 }

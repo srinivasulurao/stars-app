@@ -31,8 +31,12 @@ echo View::make('profile.header',array('title'=>$title));
             <?php echo Form::select('authorized_drivers[]',getDriversDropDown(),explode(",",$result->authorized_drivers), array('multiple'=>'multiple','style'=>'height:200px','class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('Occupancy', 'Occupancy'); ?>
             <?php echo Form::text('occupancy', $result->occupancy,array('class'=>"form-control","required"=>"required","rows"=>5)); ?>
+            <?php echo Form::label('Mileage', 'Mileage'); ?>
+            <?php echo Form::text('mileage', $result->mileage,array('class'=>"form-control","required"=>"required","rows"=>5)); ?>
             <?php echo Form::label('Manufacture Date', 'Manufacture Date'); ?>
             <?php echo Form::text('created_date', date("Y-m-d H:i",strtotime($result->created_date)),array('id'=>"created_date",'class'=>"form-control","required"=>"required")); ?>
+            <?php echo Form::label('School', 'School'); ?>
+            <?php echo Form::select('school_id',getSchoolsDropDown(),$result->school_id,array('class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('Vehicle Picture', 'Vehicle Picture'); ?>
             <?php echo Form::file('vehicle_image'); ?>
             <img class="thumbnail" style="height:70px;margin-top: 10px;margin-bottom:3px;" src="<?php echo str_replace("/public","",url($result->vehicle_image)); ?>" />

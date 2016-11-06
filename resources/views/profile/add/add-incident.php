@@ -38,7 +38,7 @@ echo View::make('profile.header',array('title'=>$title));
             <?php echo Form::label('Reporter Phone', 'Reporter Phone'); ?>
             <?php echo Form::text('phone','', array('class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('Incident Attachment', 'Incident Attachment'); ?>
-            <?php echo Form::file('incident_attachment'); ?>
+            <?php echo Form::file('incident_attachment',array('required'=>'required')); ?>
 
             <?php echo Form::token(); ?><br>
             <?php echo Form::submit('Submit',array('class'=>"btn btn-success","required"=>"required")); ?>

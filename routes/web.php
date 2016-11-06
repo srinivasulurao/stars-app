@@ -15,13 +15,18 @@
 //    return view('welcome');
 //});
 
-Route::get('/',array("middleware","Role:StarsApp","uses"=>"StarsAppAuthentication@Index"));
+Route::get('/',array("uses"=>"StarsAppAuthentication@Index"));
 
-Route::get('login',array("middleware","Role:StarsApp","uses"=>"StarsAppAuthentication@Index"));
+Route::get('login',array("uses"=>"StarsAppAuthentication@Index"));
+Route::get('forgot-credentials',array("uses"=>"StarsAppAuthentication@forgotCredentials"));
+Route::get('reset-admin-password/{authentication_string}',array("uses"=>"StarsAppAuthentication@resetAdminPassword"));
 
-Route::post('doLogin',array("middleware","Role:StarsApp","uses"=>"StarsAppAuthentication@doLogin"));
+Route::post('doLogin',array("uses"=>"StarsAppAuthentication@doLogin"));
+Route::post('check-forgot-credentials',array("uses"=>"StarsAppAuthentication@checkForgotCredentials"));
+Route::post('reset-admin-pass',array("uses"=>"StarsAppAuthentication@resetAdminPasswordDetails"));
 
-Route::get('/system-admin/dashboard',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@Dashboard"));
+//Dashboard pages.
+Route::get('/system-admin/dashboard',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@dashboard"));
 
 //Drivers pages
 Route::get('/system-admin/drivers',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@drivers"));
@@ -54,7 +59,7 @@ Route::get('/system-admin/discipline-referral/add',array("middleware","Role:Star
 Route::post('/system-admin/add-discipline-referral-details',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@addDisciplineReferralDetails"));
 
 //Logout Routing.
-Route::get('/system-admin/logout',array("middleware","Role:StarsApp","uses"=>"StarsAppAuthentication@Logout"));
+Route::get('/system-admin/logout',array("uses"=>"StarsAppAuthentication@Logout"));
 
 //Incidents Pages.
 Route::get('/system-admin/incidents',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@Incidents"));
@@ -74,3 +79,79 @@ Route::post('/system-admin/update-route-map-details',array("middleware","Role:St
 Route::get('/system-admin/route-map/add',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@addRouteMap"));
 Route::post('/system-admin/add-route-map-details',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@addRouteMapDetails"));
 
+//Maintainance Pages.
+Route::get('/system-admin/maintenance-history',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@MaintenanceHistory"));
+Route::get('/system-admin/maintenance-history/edit/{mh_id}',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@updateMaintenanceHistory"));
+Route::post('/system-admin/update-maintenance-history-details',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@updateMaintenanceHistoryDetails"));
+Route::get('/system-admin/maintenance-history/add',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@addMaintenanceHistory"));
+Route::post('/system-admin/add-maintenance-history-details',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@addMaintenanceHistoryDetails"));
+
+//Forms.
+Route::get('/system-admin/forms',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@forms"));
+Route::get('/system-admin/form/edit/{form_id}',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@updateForm"));
+Route::get('/system-admin/form/add',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@addForm"));
+Route::post('/system-admin/update-form-details',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@updateFormDetails"));
+Route::post('/system-admin/add-form-details',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@addFormDetails"));
+
+//Inspection Steps.
+Route::get('/system-admin/inspection-steps',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@inspectionSteps"));
+Route::get('/system-admin/inspection-step/edit/{inspection_step_id}',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@updateInspectionStep"));
+Route::get('/system-admin/inspection-step/add',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@addInspectionStep"));
+Route::post('/system-admin/update-inspection-step-details',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@updateInspectionStepDetails"));
+Route::post('/system-admin/add-inspection-step-details',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@addInspectionStepDetails"));
+
+//Trip History.
+Route::get('/system-admin/trip-history',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@tripHistory"));
+Route::get('/system-admin/trip-history/edit/{th_id}',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@updateTripHistory"));
+Route::get('/system-admin/trip-history/add/{inspection_id}',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@addTripHistory"));
+Route::post('/system-admin/update-trip-history-details',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@updateTripHistoryDetails"));
+Route::post('/system-admin/add-trip-history-details',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@addTripHistoryDetails"));
+
+//Add Trip Details, this is little bit tricky while integrating the trip history/
+Route::get('/system-admin/pre-trip-survey',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@preTripSurvey"));
+Route::post('/system-admin/add-pre-trip-survey',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@addPreTripSurvey"));
+Route::get('/system-admin/post-trip-survey/{post_survey_id}',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@postTripSurvey"));
+Route::post('/system-admin/update-post-trip-survey',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@updatePostTripSurvey"));
+Route::get('/system-admin/view-pre-trip-inspection/{id}',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@viewPreTripSurvey"));
+Route::get('/system-admin/view-post-trip-inspection/{id}',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@viewPostTripSurvey"));
+
+//Threshold Problems
+Route::get('/system-admin/threshold-problems',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@thresholdProblems"));
+Route::post('/system-admin/addThresholdProblem',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@addThresholdProblem"));
+Route::post('/system-admin/updateThresholdProblem',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@updateThresholdProblem"));
+
+//Route Types
+Route::get('/system-admin/route-types',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@routeTypes"));
+Route::post('/system-admin/addRouteType',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@addRouteType"));
+Route::post('/system-admin/updateRouteType',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@updateRouteType"));
+
+
+//Delete Entry from Table & Do proper Redirection
+Route::get('/system-admin/delete/{page}/{table}/{primary_index}/{id}',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@deleteSingleEntity"));
+
+//Webservice for Mobile App.
+Route::get('/web-api/getEntityById/{entity}/{entity_id}',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@getEntityById"));
+Route::get('/web-api/login-driver/{email}/{password}',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@loginDriver"));
+Route::post('/web-api/create-driver',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@createDriver"));
+Route::post('/web-api/update-driver',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@updateDriver"));
+Route::get('/web-api/getAllEntities/{entity}',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@getAllEntities"));
+Route::post('/web-api/addPreInspection',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@addPreInspection"));  # Not being used
+Route::post('/web-api/addTripHistory',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@addTripHistory"));      # Not being used
+Route::post('/web-api/updatePostInspection',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@updatePostInspection"));
+
+Route::get('/web-api/getDriverVehiclesById/{driver_id}',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@getDriverVehiclesById"));
+Route::get('/web-api/getAllStudentsBySchool/{school_id}',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@getAllStudentsBySchool"));
+Route::get('/web-api/getVehicleHistoryById/{school_id}/{vehicle_id}',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@getVehicleHistoryById"));
+Route::get('/web-api/getTripHistoryByDriver/{driver_id}',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@getTripHistoryByDriver"));
+
+Route::post('/web-api/addTrip',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@addTrip"));
+Route::put('/web-api/updateTrip/{trip_id}',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@updateTrip"));
+Route::post('/web-api/addPreTripInspection',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@addPreTripInspection"));
+
+Route::get('/web-api/getFormsBySchool/{school_id}',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@getFormBySchool"));
+Route::get('/web-api/getRouteMapsBySchool/{school_id}',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@getRouteMapsBySchool"));
+
+Route::post('/web-api/addMaintenanceIssue/',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@addMaintenanceIssue"));
+Route::post('/web-api/addDisciplineReferral/',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@addDisciplineReferral"));
+
+Route::get('/web-api/getEntityBySchool/{entity}/{school_id}',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@getEntityBySchool"));

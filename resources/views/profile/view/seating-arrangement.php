@@ -5,7 +5,7 @@ echo View::make('profile.header',array('title'=>$title));
 <div class='container profile-container'>
     <div class='col-md-2 sidebar'>
         <?php
-        echo View::make("profile.sidebar",array('active_link'=>'Vehicles'))->render();
+        echo View::make("profile.sidebar",array('active_link'=>'Seating Chart'))->render();
         ?>
     </div>
     <!-- Entire content to be shown here -->

@@ -11,6 +11,17 @@ use Input;
 
 class AdminManagerModel extends Model
 {
+
+
+public static function security(){
+    //check session if user is logged in or not.
+    if(empty(Session::get('admin_id'))){
+        return 1;
+    }
+}
+############################################
+//Fetching all data
+############################################    
    public static function getAllDrivers(){
      $results=DB::table("drivers")->get();
      return $results;
@@ -42,6 +53,45 @@ class AdminManagerModel extends Model
         return $results;
     }
 
+    public static function getAllForms(){
+        $results=DB::table("forms")->get();
+        return $results;
+    }
+
+    public static function getAllTripInspectionSteps(){
+        $results=DB::table('trip_inspection_steps')->orderBy('inspection_type')->get();
+        return $results;
+    }
+
+    public static function getAllTripHistory(){
+        $results=DB::table('trip_history')->get();
+        return $results;
+    }
+
+    public static function getAllThresholdProblems(){
+        $results=DB::table('school_vehicle_threshold')->get();
+        return $results;
+    }
+
+    public static function getAllRouteTypes(){
+        $results=DB::table('route_types')->get();
+        return $results;
+    }
+
+############################################    
+// Fetching total Attributes for Dashboard
+############################################
+
+    public static function getTotalEntities($table_name){
+      return DB::table($table_name)->count();
+    }
+    public static function getTotalEntitiesWithCondition($table_name,$cond,$cond_value){
+      return DB::table($table_name)->where($cond,$cond_value)->count();
+    }
+    
+//Fetching data by Id
+############################################
+
     public static function getDriverById($driver_id){
         $results=DB::table('drivers')->where('driver_id',$driver_id)->first();
         return $results;
@@ -71,6 +121,42 @@ class AdminManagerModel extends Model
         return $results;
     }
 
+    public static function getAllMaintenanceHistory(){
+        $results=DB::table('vehicle_maintenance_history')->get();
+        return $results;
+    }
+
+    public static function getMaintenanceHistoryById($issue_id){
+        $results=DB::table('vehicle_maintenance_history')->where('issue_id',$issue_id)->first();
+        return $results;
+    }
+
+    public static function getFormById($form_id){
+        $results=DB::table('forms')->where('form_id',$form_id)->first();
+        return $results;
+    }
+
+    public static function getInspectionStepById($inspection_step_id){
+        $results=DB::table('trip_inspection_steps')->where('inspection_step_id',$inspection_step_id)->first();
+        return $results;
+    }
+
+    public static function getTripHistoryById($th_id){
+        $results=DB::table('trip_history')->where('trip_id',$th_id)->first();
+        return $results;
+    }
+
+    public static function getTripInspectionById($inspection_id){
+       $results=DB::table('trip_inspections')->where('inspection_id',$inspection_id)->first();
+       return $results;
+    }
+
+
+
+    ######################################
+    //Adding & Updating
+    ######################################
+
     public static function addRouteMapDetails(){
 
         $details=array();
@@ -81,6 +167,7 @@ class AdminManagerModel extends Model
         $details['route_end_latitude']=Input::input('route_end_latitude');
         $details['route_start_longitude']=Input::input('route_start_longitude');
         $details['route_end_longitude']=Input::input('route_end_longitude');
+        $details['route_type']=Input::input('route_type');
         $files=Input::file('route_map_attachment');
 
         if(sizeof($files)):
@@ -119,6 +206,7 @@ class AdminManagerModel extends Model
         $details['route_end_latitude']=Input::input('route_end_latitude');
         $details['route_start_longitude']=Input::input('route_start_longitude');
         $details['route_end_longitude']=Input::input('route_end_longitude');
+        $details['route_type']=Input::input('route_type');
         $files=Input::file('route_map_attachment');
         if(sizeof($files)):
             $attachments=array();
@@ -217,7 +305,7 @@ class AdminManagerModel extends Model
         $details['city']=$post->input('city');
         $details['state']=$post->input('state');
         $details['address']=$post->input('address');
-        $details['district']=$post->input('district');
+        $details['district_id']=$post->input('district_id');
         $details['school_id']=$post->input('school_id');
         $details['phone']=$post->input('phone');
         $details['password']="dadsadsa";
@@ -256,7 +344,7 @@ class AdminManagerModel extends Model
         $details['city']=$post->input('city');
         $details['state']=$post->input('state');
         $details['address']=$post->input('address');
-        $details['district']=$post->input('district');
+        $details['district_id']=$post->input('district_id');
         $details['school_id']=$post->input('school_id');
         $details['phone']=$post->input('phone');
         if (Input::hasFile('profile_pic')):
@@ -282,6 +370,7 @@ class AdminManagerModel extends Model
         }
 
     }
+    
 
     public static function updateIncidentDetails(){
 
@@ -374,6 +463,45 @@ class AdminManagerModel extends Model
         }
     }
 
+   public static function addVehicleDetails(){
+       $details=array();
+       $details['vehicle_name']=Input::input('vehicle_name');
+       $details['vehicle_no']=Input::input('vehicle_no');
+       $details['authorized_drivers']=@implode(",",Input::input('authorized_drivers'));
+       $details['occupancy']=Input::input('occupancy');
+       $details['mileage']=Input::input('mileage');
+       $details['created_date']=date("Y-m-d H:i:s",strtotime(Input::input('created_date')));
+       $details['school_id']=Input::input('school_id');
+
+
+       if (Input::hasFile('vehicle_image')):
+           $destinationPath = base_path('uploads/vehicle-pics'); // upload path
+           $extension = Input::file('vehicle_image')->getClientOriginalExtension(); // getting image extension
+           $fileName = md5(time()).'.'.$extension; // renaming.
+           Input::file('vehicle_image')->move($destinationPath, $fileName); // uploading file to given path
+           $details['vehicle_image']="/uploads/vehicle-pics/".$fileName;
+       endif;
+
+       if (Input::hasFile('seat_arrangement_csv')):
+           $destinationPath = base_path('uploads/seat-arrangement-csv'); // upload path
+           $extension = Input::file('seat_arrangement_csv')->getClientOriginalExtension(); // getting image extension
+           $fileName = md5(time()).'.'.$extension; // renaming.
+           Input::file('seat_arrangement_csv')->move($destinationPath, $fileName); // uploading file to given path
+           $details['seat_arrangement_csv']="/uploads/seat-arrangement-csv/".$fileName;
+       endif;
+
+       try {
+           DB::table('vehicles')->insert($details);
+           Session::put('system_message','Vehicle Details Added Successfully !');
+           Session::put('system_message_type','success');
+       } catch (\Illuminate\Database\QueryException $e) {
+           Session::put('system_message',$e->getMessage());
+           Session::put('system_message_type','danger');
+       } catch (\Exception $e) {
+           Session::put('system_message',$e->getMessage());
+           Session::put('system_message_type','danger');
+       }
+   }
 
     public static function updateVehicleDetails(){
         $details=array();
@@ -381,7 +509,9 @@ class AdminManagerModel extends Model
         $details['vehicle_no']=Input::input('vehicle_no');
         $details['authorized_drivers']=@implode(",",Input::input('authorized_drivers'));
         $details['occupancy']=Input::input('occupancy');
+        $details['mileage']=Input::input('mileage');
         $details['created_date']=date("Y-m-d H:i:s",strtotime(Input::input('created_date')));
+        $details['school_id']=Input::input('school_id');
 
 
         if (Input::hasFile('vehicle_image')):
@@ -438,6 +568,373 @@ class AdminManagerModel extends Model
         }
     }
 
+    public static function updateMaintenanceHistoryDetails(){
+      $details=array();
+        $details['school_id']=Input::input('school_id');
+        $details['driver_id']=Input::input('driver_id');
+        $details['vehicle_id']=Input::input('vehicle_id');
+        $details['problem_occured_time']=date("Y-m-d,H:i:s",strtotime(Input::input('problem_occured_time')));
+        $details['problem_location']=Input::input('problem_location');
+        $details['problem']=Input::input('problem');
+        $details['comments']=Input::input('comments');
 
+        $issue_id=Input::input('issue_id');
+        try {
+            DB::table('vehicle_maintenance_history')->where('issue_id',$issue_id)->update($details);
+            Session::put('system_message','Maintenance History Details Updated Successfully !');
+            Session::put('system_message_type','success');
+        } catch (\Illuminate\Database\QueryException $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        } catch (\Exception $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        }
+
+    }
+
+    public static function addMaintenanceHistoryDetails(){
+
+        $details=array();
+        $details['school_id']=Input::input('school_id');
+        $details['driver_id']=Input::input('driver_id');
+        $details['vehicle_id']=Input::input('vehicle_id');
+        $details['problem_occured_time']=date("Y-m-d,H:i:s",strtotime(Input::input('problem_occured_time')));
+        $details['problem_location']=Input::input('problem_location');
+        $details['problem']=Input::input('problem');
+        $details['comments']=Input::input('comments');
+
+        try {
+            DB::table('vehicle_maintenance_history')->insert($details);
+            Session::put('system_message','Maintenance History Details Added Successfully !');
+            Session::put('system_message_type','success');
+        } catch (\Illuminate\Database\QueryException $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        } catch (\Exception $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        }
+
+    }
+
+    public static function updateFormDetails(){
+        $details=array();
+        $details['form_name']=Input::input('form_name');
+        $details['form_description']=Input::input('form_description');
+        $details['school_id']=Input::input('school_id');
+
+        if (Input::hasFile('form_attachment')):
+            $destinationPath = base_path('uploads/forms'); // upload path
+            $extension = Input::file('form_attachment')->getClientOriginalExtension(); // getting image extension
+            $fileName = md5(time()).'.'.$extension; // renaming.
+            Input::file('form_attachment')->move($destinationPath, $fileName); // uploading file to given path
+            $details['form_attachment']="/uploads/forms/".$fileName;
+        endif;
+
+        $form_id=Input::input('form_id');
+
+        try {
+            DB::table('forms')->where('form_id',$form_id)->update($details);
+            Session::put('system_message','Form Details Updated Successfully !');
+            Session::put('system_message_type','success');
+        } catch (\Illuminate\Database\QueryException $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        } catch (\Exception $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        }
+    }
+
+   public static function addFormDetails(){
+       $details=array();
+        $details['form_name']=Input::input('form_name');
+        $details['form_description']=Input::input('form_description');
+        $details['school_id']=Input::input('school_id');
+
+        if (Input::hasFile('form_attachment')):
+            $destinationPath = base_path('uploads/forms'); // upload path
+            $extension = Input::file('form_attachment')->getClientOriginalExtension(); // getting image extension
+            $fileName = md5(time()).'.'.$extension; // renaming.
+            Input::file('form_attachment')->move($destinationPath, $fileName); // uploading file to given path
+            $details['form_attachment']="/uploads/forms/".$fileName;
+        endif;
+
+        try {
+            DB::table('forms')->insert($details);
+            Session::put('system_message','Form Details Added Successfully !');
+            Session::put('system_message_type','success');
+        } catch (\Illuminate\Database\QueryException $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        } catch (\Exception $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        }
+   }
+
+   public static function updateInspectionStepDetails(){
+       $details=array();
+        $details['step']=Input::input('step');
+        $details['inspection_type']=Input::input('inspection_type');
+
+        if (Input::hasFile('step_image')):
+            $destinationPath = base_path('uploads/inspection-steps'); // upload path
+            $extension = Input::file('step_image')->getClientOriginalExtension(); // getting image extension
+            $fileName = md5(time()).'.'.$extension; // renaming.
+            Input::file('step_image')->move($destinationPath, $fileName); // uploading file to given path
+            $details['step_image']="/uploads/inspection-steps/".$fileName;
+        endif;
+        $inspection_step_id=Input::get('inspection_step_id');
+        try {
+            DB::table('trip_inspection_steps')->where('inspection_step_id',$inspection_step_id)->update($details);
+            Session::put('system_message','Inspection Step Updated Successfully !');
+            Session::put('system_message_type','success');
+        } catch (\Illuminate\Database\QueryException $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        } catch (\Exception $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        }
+   }
+
+   public static function addInspectionStepDetails(){
+        $details=array();
+        $details['step']=Input::input('step');
+        $details['inspection_type']=Input::input('inspection_type');
+
+        if (Input::hasFile('step_image')):
+            $destinationPath = base_path('uploads/inspection-steps'); // upload path
+            $extension = Input::file('step_image')->getClientOriginalExtension(); // getting image extension
+            $fileName = md5(time()).'.'.$extension; // renaming.
+            Input::file('step_image')->move($destinationPath, $fileName); // uploading file to given path
+            $details['step_image']="/uploads/inspection-steps/".$fileName;
+        endif;
+
+        try {
+            DB::table('trip_inspection_steps')->insert($details);
+            Session::put('system_message','Inspection Step Added Successfully !');
+            Session::put('system_message_type','success');
+        } catch (\Illuminate\Database\QueryException $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        } catch (\Exception $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        }
+   }
+
+   public static function updateTripHistoryDetails(){
+        $details=array();
+        $details['route_id']=Input::input('route_id');
+        $details['pre_trip']=Input::input('pre_trip');
+        $details['post_trip']=Input::input('post_trip');
+        $details['trip_time']=date("Y-m-d,H:i:s",strtotime(Input::input('trip_time')));
+        $details['trip_status']=Input::input('trip_status');
+
+        $trip_id=Input::get('trip_id');
+        try {
+            DB::table('trip_history')->where('trip_id',$trip_id)->update($details);
+            Session::put('system_message','Trip Details Updated Successfully !');
+            Session::put('system_message_type','success');
+        } catch (\Illuminate\Database\QueryException $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        } catch (\Exception $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        }
+   }
+
+   public static function addTripHistoryDetails(){
+       $details=array();
+        $details['route_id']=Input::input('route_id');
+        $details['pre_trip']=Input::input('pre_trip');
+        $details['post_trip']=Input::input('post_trip');
+        $details['trip_time']=date("Y-m-d,H:i:s",strtotime(Input::input('trip_time')));
+        $details['trip_status']=Input::input('trip_status');
+        $details['pre_inspection_id']=Input::input('pre_inspection_id');
+        $details['post_inspection_id']=intval($details['pre_inspection_id'])+1; // The exact next would be the trip history data.
+
+        try {
+            DB::table('trip_history')->insert($details);
+            Session::put('system_message','Trip Details Added Successfully !');
+            Session::put('system_message_type','success');
+        } catch (\Illuminate\Database\QueryException $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        } catch (\Exception $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        }
+   }
+
+//Trip Inspection
+
+   public static function addPreTripDetails($post){
+    
+    $details=array();
+    $details['comments']=$post['comments'];
+    $details['odometer_reading']=$post['odometer_reading'];
+    unset($post['_token']);
+    unset($post['comments']);
+    unset($post['odometer_reading']);
+    $details['inspection_data']=base64_encode(serialize($post));
+
+    try {
+            DB::table('trip_inspections')->insert($details);
+            Session::put('system_message','Pre Inspection Details Added Successfully !');
+            Session::put('system_message_type','success');
+        } catch (\Illuminate\Database\QueryException $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        } catch (\Exception $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        }
+
+        $trip_inspection_table=DB::select('select * from trip_inspections order by inspection_id DESC');
+        return $trip_inspection_table[0]->inspection_id;
+   }
+
+   public static function addPostTripDetails($last_insert_id){
+      $details=array();
+      $details['inspection_id']=$last_insert_id+1;
+      $details['inspection_data']=base64_encode(serialize(array()));   // Serialize an empty array
+     try {
+            DB::table('trip_inspections')->insert($details);
+        } catch (\Illuminate\Database\QueryException $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        } catch (\Exception $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        }
+   }
+
+   public static function updatePostTripDetails($post){
+    $details=array();
+    $post_survey_id=Input::input('post_survey_id');
+    $details['comments']=$post['comments'];
+    $details['odometer_reading']=$post['odometer_reading'];
+    unset($post['_token']);
+    unset($post['comments']);
+    unset($post['odometer_reading']);
+    $details['inspection_data']=base64_encode(serialize($post));
+    
+    try {
+            DB::table('trip_inspections')->where('inspection_id',$post_survey_id)->update($details);
+            Session::put('system_message','Post Inspection Details Saved Successfully !');
+            Session::put('system_message_type','success');
+        } catch (\Illuminate\Database\QueryException $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        } catch (\Exception $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        }
+
+   }
+
+//Threshold Problems
+   public static function addThresholdProblemModel($post){
+
+      $details=array();
+      $details['threshold']=$post['threshold'];
+      $details['threshold_value']=$post['threshold_value'];
+      $details['school_id']=$post['school_id'];
+      
+     try {
+            DB::table('school_vehicle_threshold')->insert($details);
+            Session::put('system_message','Threshold Problem Details Added Successfully !');
+            Session::put('system_message_type','success');
+        } catch (\Illuminate\Database\QueryException $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        } catch (\Exception $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        }
+   }
+
+   public static function updateThresholdProblemModel($post){
+       $details=array();
+      $details['threshold']=$post['threshold'];
+      $details['threshold_value']=$post['threshold_value'];
+      $details['school_id']=$post['school_id'];
+      
+     try {
+            DB::table('school_vehicle_threshold')->where('threshold_id',$post['threshold_id'])->update($details);
+            Session::put('system_message','Threshold Problem Details Updated Successfully !');
+            Session::put('system_message_type','success');
+        } catch (\Illuminate\Database\QueryException $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        } catch (\Exception $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        }
+   }
+
+
+//Route Types
+   public static function addRouteTypeModel($post){
+
+      $details=array();
+      $details['type']=$post['type'];
+      
+      
+     try {
+            DB::table('route_types')->insert($details);
+            Session::put('system_message','Route Type Added Successfully !');
+            Session::put('system_message_type','success');
+        } catch (\Illuminate\Database\QueryException $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        } catch (\Exception $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        }
+   }
+
+   public static function updateRouteTypeModel($post){
+     $details=array();
+      $details['type']=$post['type'];
+     
+     try {
+            DB::table('route_types')->where('id',$post['id'])->update($details);
+            Session::put('system_message','Route Type Updated Successfully !');
+            Session::put('system_message_type','success');
+        } catch (\Illuminate\Database\QueryException $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        } catch (\Exception $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        }
+   }
+   //Finall the deletion is happening here
+
+   public static function deleteSingleEntity($page,$table,$primary_index,$id){
+
+
+        try {
+            DB::table($table)->where($primary_index,$id)->delete();
+            Session::put('system_message','Data Deleted Successfully !');
+            Session::put('system_message_type','success');
+        } catch (\Illuminate\Database\QueryException $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        } catch (\Exception $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        }
+
+   }
+
+
+   
 
 }//Class ends here.
