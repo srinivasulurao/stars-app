@@ -23,16 +23,16 @@ echo View::make('profile.header',array('title'=>$title));
         ?>
         <h1>Add Vehicle Details</h1>
         <form method="post" action="<?php echo site_url("/system-admin/add-vehicle-details"); ?>"  style="width:50%" enctype="multipart/form-data">
+            <!--
             <?php echo Form::label('Vehicle Name', 'Vehicle Name'); ?>
             <?php echo Form::text('vehicle_name','',array('class'=>"form-control","required"=>"required")); ?>
-            <?php echo Form::label('Vehicle Number', 'Vehicle Number'); ?>
-            <?php echo Form::text('vehicle_no', '',array('class'=>"form-control","required"=>"required")); ?>
+            -->
+            <!--
             <?php echo Form::label('Authorized Drivers', 'Authorized Drivers'); ?>
             <?php echo Form::select('authorized_drivers[]',getDriversDropDown(),'', array('multiple'=>'multiple','style'=>'height:200px','class'=>"form-control","required"=>"required")); ?>
-            <?php echo Form::label('Occupancy', 'Occupancy'); ?>
-            <?php echo Form::text('occupancy','',array('class'=>"form-control","required"=>"required","rows"=>5)); ?>
-            <?php echo Form::label('Mileage', 'Mileage'); ?>
-            <?php echo Form::text('mileage','',array('class'=>"form-control","required"=>"required","rows"=>5)); ?>
+            
+            -->
+            <!--
             <?php echo Form::label('Manufacture Date', 'Manufacture Date'); ?>
             <?php echo Form::text('created_date','',array('id'=>"created_date",'class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('School', 'School'); ?>
@@ -41,6 +41,20 @@ echo View::make('profile.header',array('title'=>$title));
             <?php echo Form::file('vehicle_image',array('required'=>"required")); ?>
             <?php echo Form::label('Seat Arrangement CSV', 'Seat Arrangement CSV'); ?>
             <?php echo Form::file('seat_arrangement_csv'); ?>
+            -->  
+            <?php echo Form::label('Vehicle Number', 'Vehicle Number'); ?>
+            <?php echo Form::text('vehicle_no', '',array('class'=>"form-control","required"=>"required")); ?>
+            <?php echo Form::label('Vehicle Type', 'Vehicle Type'); ?>
+            <?php echo Form::select('vehicle_type',vehicleTypeDropDown(),'',array('class'=>"form-control")); ?>
+            <?php echo Form::label('Occupancy', 'Occupancy'); ?>
+            <?php echo Form::text('occupancy','',array('class'=>"form-control","required"=>"required","rows"=>5)); ?>
+            <?php echo Form::label('Mileage', 'Mileage'); ?>
+            <?php echo Form::text('mileage','',array('class'=>"form-control","required"=>"required","rows"=>5)); ?>
+            <?php echo Form::label('District', 'District'); ?>
+            <?php echo Form::select('district_id',getDistrictsDropDown(),'',array('class'=>"form-control","required"=>"required")); ?>
+            <?php echo Form::label('Year Model', 'Year Model'); ?>
+            <?php echo Form::text('year_model','',array('placeholder'=>"YYYY (Ex: 1991)","maxlength"=>"4",'class'=>"form-control","required"=>"required","rows"=>5)); ?>
+            
 
             <?php echo Form::token(); ?><br>
             <?php echo Form::submit('Submit',array('class'=>"btn btn-success","required"=>"required")); ?>

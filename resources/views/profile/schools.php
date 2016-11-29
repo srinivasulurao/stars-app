@@ -5,7 +5,7 @@ echo View::make('profile.header',array('title'=>$title));
 <div class='container profile-container'>
 <div class='col-md-2 sidebar'>
 <?php
-echo View::make("profile.sidebar",array('active_link'=>'Schools'))->render();
+echo View::make("profile.sidebar",array('active_link'=>'Campuses'))->render();
 ?>
 </div>
 <!-- Entire content to be shown here -->
@@ -21,7 +21,7 @@ echo View::make("profile.sidebar",array('active_link'=>'Schools'))->render();
 
   //debug($accountDetail);
   ?>
-  <h1>Schools  <a class="btn btn-primary" href="<?php echo url("/system-admin/school/add"); ?>"style="float:right">Add New</a></h1>
+  <h1>Campuses  <a class="btn btn-primary" href="<?php echo url("/system-admin/school/add"); ?>"style="float:right">Add New</a></h1>
 
   <table class='table table-striped'>
   <tr><th>ID</th><th>Picture</th><th>Name</th><th>District</th><th> Address</th><th width='30%'>Description</th></th><th width="13%">Action</th></tr>

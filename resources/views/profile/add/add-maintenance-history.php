@@ -30,13 +30,15 @@ echo View::make('profile.header',array('title'=>$title));
             <?php echo Form::label('Driver', 'Driver'); ?>
             <?php echo Form::select('driver_id',getDriversDropDown(),'',array('class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('Problem', 'Problem'); ?>
-            <?php echo Form::select('problem',getThresholdDropDown(),'',array('class'=>"form-control","required"=>"required")); ?>
+            <?php echo Form::select('problem',vehicleProblemDropDown(),'',array('class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('Problem Time','Problem Time'); ?>
             <?php echo Form::text('problem_occured_time','', array('id'=>'problem_occured_time','class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('Problem Location',"Problem Location"); ?>
             <?php echo Form::text('problem_location','',array('class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('Comments', 'Comments'); ?>
             <?php echo Form::textarea('comments','',array('class'=>"form-control","required"=>"required","rows"=>5)); ?>
+            <?php echo Form::label('Completion Status', 'Completion Status'); ?>
+            <?php echo Form::select('completion_status',array(0=>"Not Complete",1=>"Complete"),'',array('class'=>"form-control","required"=>"required")); ?>
             <br>
 
             

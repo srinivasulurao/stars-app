@@ -6,7 +6,7 @@ echo View::make('profile.header',array('title'=>$title));
 
 <div class='col-md-2 sidebar'>
 <?php
-echo View::make("profile.sidebar",array('active_link'=>'Threshold Problems'))->render();
+echo View::make("profile.sidebar",array('active_link'=>'Maintenance Threshold Settings'))->render();
 ?>
 </div>
 <!-- Entire content to be shown here -->
@@ -22,18 +22,18 @@ echo View::make("profile.sidebar",array('active_link'=>'Threshold Problems'))->r
 
   //debug($accountDetail);
   ?>
-  <h1>Threshold Problems <a data-toggle='modal' data-target='#addEntity'  href='javascript:void()' class="btn btn-primary" style="float:right">Add New</a></h1>
+  <h1>Maintenance Threshold Settings <a data-toggle='modal' data-target='#addEntity'  href='javascript:void()' class="btn btn-primary" style="float:right">Add New</a></h1>
   <table class='table table-striped'>
-  <tr><th>ID</th><th>School</th><th>Threshold</th><th>Threshold Value</th><th>Action</th></tr>
+  <tr><th>ID</th><th>Threshold</th><th>Threshold Value</th><th>Vehicle Type</th><th>Action</th></tr>
   <?php
   $root=Request::root();
   foreach($results as $key):
     
-    $school=schoolName($key->school_id);
-    $js=json_encode(array('id'=>$key->threshold_id,"threshold"=>$key->threshold,'threshold_value'=>$key->threshold_value,'school_id'=>$key->school_id));
+    $vehicle_type=vehicleType($key->vehicle_type);
+    $js=json_encode(array('id'=>$key->threshold_id,"threshold"=>$key->threshold,'threshold_value'=>$key->threshold_value,'vehicle_type'=>$key->vehicle_type));
     $edit="<a onclick='editVal($js)' data-toggle='modal' data-target='#editEntity' href='javascript:void(0)' class='btn btn-info'><i class='glyphicon glyphicon-edit editVal'></i></a>";
     $delete="<a data-toggle='modal' data-target='#deleteEntity'  href='javascript:void()' data-link='$root/system-admin/delete/threshold-problems/school_vehicle_threshold/threshold_id/{$key->threshold_id}' class='btn btn-danger delete_atrib'><i class='glyphicon glyphicon-trash'></i></a>";
-      echo "<tr><td>{$key->threshold_id}</td><td>$school</td><td><code>{$key->threshold}</code></td><td>{$key->threshold_value}</td><td>$edit  $delete</td></tr>";
+      echo "<tr><td>{$key->threshold_id}</td><td><code>{$key->threshold}</code></td><td>{$key->threshold_value}</td><td>$vehicle_type</td><td>$edit  $delete</td></tr>";
   endforeach;
   ?>
 </table>
@@ -56,9 +56,9 @@ echo View::make("profile.sidebar",array('active_link'=>'Threshold Problems'))->r
             <?php echo Form::text('threshold', '',array('class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('Threshold Value', 'Threshold Value'); ?>
             <?php echo Form::textarea('threshold_value', '',array('class'=>"form-control","required"=>"required")); ?>
-            <?php echo Form::label('School', 'School'); ?>
-            <?php echo Form::select('school_id',getSchoolsDropDown(),'',array('class'=>"form-control","required"=>"required")); ?>
-      </div>
+            <?php echo Form::label('Vehicle Type', 'Vehicle Type'); ?>
+            <?php echo Form::select('vehicle_type',vehicleTypeDropDown(),'',array('class'=>"form-control","required"=>"required")); ?>
+            </div>
       <div class="modal-footer">
         <input type='hidden' name='_token' value="<?php echo csrf_token(); ?>">
         <input type='hidden' name='del_food_category_id' id='del_food_category_id'>
@@ -83,8 +83,8 @@ echo View::make("profile.sidebar",array('active_link'=>'Threshold Problems'))->r
             <?php echo Form::text('threshold', '',array('id'=>'threshold','class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('Threshold Value', 'Threshold Value'); ?>
             <?php echo Form::textarea('threshold_value', '',array('id'=>'threshold_value','class'=>"form-control","required"=>"required")); ?>
-            <?php echo Form::label('School', 'School'); ?>
-            <?php echo Form::select('school_id',getSchoolsDropDown(),'',array('id'=>'school_id','class'=>"form-control","required"=>"required")); ?>
+            <?php echo Form::label('Vehicle Type', 'Vehicle Type'); ?>
+            <?php echo Form::select('vehicle_type',vehicleTypeDropDown(),'',array('id'=>'vehicle_type','class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::hidden('threshold_id', '',array('id'=>'threshold_id','class'=>"form-control","required"=>"required")); ?>
       </div>
       <div class="modal-footer">
@@ -132,7 +132,7 @@ echo view('profile.footer');
     $('#threshold_id').val(jsd.id);
     $('#threshold').val(jsd.threshold);
     $('#threshold_value').val(jsd.threshold_value);
-    $('#school_id').val(jsd.school_id);
+    $('#vehicle_type').val(jsd.vehicle_type);
   }
 
 </script>

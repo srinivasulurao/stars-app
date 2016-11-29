@@ -5,7 +5,7 @@ echo View::make('profile.header',array('title'=>$title));
 <div class='container profile-container'>
 <div class='col-md-2 sidebar'>
 <?php
-echo View::make("profile.sidebar",array('active_link'=>'Route Maps'))->render();
+echo View::make("profile.sidebar",array('active_link'=>'Route Info'))->render();
 ?>
 </div>
 <!-- Entire content to be shown here -->
@@ -18,13 +18,14 @@ echo View::make("profile.sidebar",array('active_link'=>'Route Maps'))->render();
     Session::forget('system_message');
     Session::forget('system_message_type');
   endif;
+$sample_csv_file=str_replace("/public","",Request::root()."/uploads/sample/Sample-Seating-Arrangement.csv");
 
   //debug($accountDetail);
   ?>
-  <h1><i class="glyphicon glyphicon-map-marker"></i> Route Maps <a  href="<?php echo url("system-admin/route-map/add"); ?>" style="float:right" class="btn btn-primary">Add New</a></h1>
+  <h1><i class="glyphicon glyphicon-map-marker"></i> Route Info <a  href="<?php echo url("system-admin/route-map/add"); ?>" style="float:right" class="btn btn-primary">Add New</a> <a download="Sample-Seating-Arrangement.csv" href='<?php echo $sample_csv_file; ?>' class="btn btn-primary" style="float:right;margin-right:10px">Download Sample CSV File</a></h1>
 
   <table class='table table-striped'>
-  <tr><th>Route ID</th><th>Route Name</th><th>School</th><th>District</th><th>Start Point Coordinate</th><th>End Point Coordinates</th><th>Action</th></tr>
+  <tr><th>Route ID</th><th>Route Name</th><th>District</th><th>School</th><th style='display: none'>Start Point Coordinate</th><th style='display:none'>End Point Coordinates</th><th>Action</th></tr>
   <?php
   $root=Request::root();
   foreach($results as $key):
@@ -34,7 +35,7 @@ echo View::make("profile.sidebar",array('active_link'=>'Route Maps'))->render();
     $delete="<a data-toggle='modal' data-target='#deleteEntity'  href='javascript:void()' data-link='$root/system-admin/delete/route-maps/routes_maps/route_id/{$key->route_id}' class='btn btn-danger delete_atrib'><i class='glyphicon glyphicon-trash'></i></a>";
     $school=schoolName($key->school_id);
     $district=districtName($key->district_id);
-  echo "<tr><td>{$key->route_id}</td><td>{$key->route_name}</td><td>{$school}</td><td>{$district}</td><td><code>{$key->route_start_latitude}</code>, <code>{$key->route_start_longitude}</code></td><td><code>{$key->route_end_latitude}</code>, <code>{$key->route_end_longitude}</code></td><td>$edit  $delete</td></tr>";
+  echo "<tr><td>{$key->route_id}</td><td>{$key->route_name}</td><td>{$district}</td><td>{$school}</td><td style='display:none'><code>{$key->route_start_latitude}</code>, <code>{$key->route_start_longitude}</code></td><td style='display:none'><code>{$key->route_end_latitude}</code>, <code>{$key->route_end_longitude}</code></td><td>$edit  $delete</td></tr>";
   endforeach;
   ?>
 </table>

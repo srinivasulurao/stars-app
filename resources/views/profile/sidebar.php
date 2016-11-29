@@ -3,16 +3,16 @@ $sidebarLinks=array();
 $sidebarLinks['Dashboard']="/system-admin/dashboard";
 $sidebarLinks["Drivers"]="/system-admin/drivers";
 $sidebarLinks["Incidents"]="/system-admin/incidents";
-$sidebarLinks['Schools']="/system-admin/schools";
-$sidebarLinks['Route Maps']="/system-admin/route-maps";
+$sidebarLinks['Campuses']="/system-admin/schools";
+$sidebarLinks['Route Info']="/system-admin/route-maps";
 $sidebarLinks["Discipline Referrals"]="/system-admin/discipline-referrals";
 $sidebarLinks['Vehicles']="/system-admin/vehicles";
 $sidebarLinks['Maintenance']="/system-admin/maintenance-history";
-$sidebarLinks['Seating Chart']="/system-admin/seating-charts";
+//$sidebarLinks['Seating Chart']="/system-admin/seating-charts";
 $sidebarLinks['Trip Inspection Steps']="/system-admin/inspection-steps";
 $sidebarLinks['Trip History']="/system-admin/trip-history";
 $sidebarLinks["Forms"]="/system-admin/forms";
-$sidebarLinks["Threshold Problems"]="/system-admin/threshold-problems";
+$sidebarLinks["Maintenance Threshold Settings"]="/system-admin/threshold-problems";
 $sidebarLinks["Route Types"]="/system-admin/route-types";
 ?>
 

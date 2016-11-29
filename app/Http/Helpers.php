@@ -65,6 +65,18 @@ function getRoutesDropDown(){
     endforeach;
     return $list;
 }
+
+function getDriverDescriptionDropDown(){
+    
+    $results=DB::table("driver_description")->get();
+    $list=array();
+    $list['']="--SELECT DESCRIPTION TYPE--";
+    foreach($results as $result):
+        $list[$result->driver_description_id]=$result->description;
+    endforeach;
+    return $list;
+}
+
 function getInspectionTypeDropDown(){
     $inspection_type=array();
     $inspection_type['']="--SELECT INSPECTION TYPE--";
@@ -123,15 +135,87 @@ function getThresholdDropDown(){
 
 }
 
-function vehicleName($vehicle_id){
-    if(DB::table('vehicles')->where('vehicle_id',$vehicle_id)->count()){
-    $result=DB::table('vehicles')->where('vehicle_id',$vehicle_id)->first();
-    return $result->vehicle_name;
+function securityQuestionsDropDown(){
+     $list=array();
+    $list['']="--SELECT SECURITY QUESTION--";
+    $results=DB::table("security_questions")->get();
+    foreach($results as $result):
+        $list[$result->question_id]=$result->question;
+    endforeach;
+    return $list;
+}
+
+function vehicleTypeDropDown(){
+     $list=array();
+    $list['']="--SELECT VEHICLE TYPE--";
+    $results=DB::table("vehicle_type")->get();
+    foreach($results as $result):
+        $list[$result->vehicle_type_id]=$result->description;
+    endforeach;
+    return $list;
+}
+
+function vehicleProblemDropDown(){
+    $list=array();
+    $list['']="--SELECT VEHICLE PROBLEM--";
+    $results=DB::table("vehicle_problem")->get();
+    foreach($results as $result):
+        $list[$result->vehicle_problem_id]=$result->description;
+    endforeach;
+    return $list;
+}
+
+function vehicleProblem($id){
+    if(DB::table('vehicle_problem')->where('vehicle_problem_id',$id)->count()){
+    $result=DB::table('vehicle_problem')->where('vehicle_problem_id',$id)->first();
+    return $result->description;
     }
     else{
         return "";
     }
 }
+
+function vehicleType($id){
+
+     if(DB::table('vehicle_type')->where('vehicle_type_id',$id)->count()){
+    $result=DB::table('vehicle_type')->where('vehicle_type_id',$id)->first();
+    return $result->description;
+    }
+    else{
+        return "";
+    }
+}
+
+function driverDescription($ddi){
+
+     if(DB::table('driver_description')->where('driver_description_id',$ddi)->count()){
+    $result=DB::table('driver_description')->where('driver_description_id',$ddi)->first();
+    return $result->description;
+    }
+    else{
+        return "";
+    }
+}
+function vehicleName($vehicle_id){
+    if(DB::table('vehicles')->where('vehicle_id',$vehicle_id)->count()){
+    $result=DB::table('vehicles')->where('vehicle_id',$vehicle_id)->first();
+    return $result->vehicle_no;
+    }
+    else{
+        return "";
+    }
+}
+
+function routeType($type_id){
+    if(DB::table('route_types')->where('id',$type_id)->count()){
+    $result=DB::table('route_types')->where('id',$type_id)->first();
+    return $result->type;
+    }
+    else{
+        return "";
+    }
+}
+
 function schoolName($school_id){
     if(DB::table('schools')->where('school_id',$school_id)->count()){
     $result=DB::table('schools')->where('school_id',$school_id)->first();

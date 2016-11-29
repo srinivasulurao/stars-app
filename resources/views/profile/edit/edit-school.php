@@ -21,7 +21,7 @@ echo View::make('profile.header',array('title'=>$title));
 
         //debug($accountDetail);
         ?>
-        <h1>Edit School Details</h1>
+        <h1>Edit Campus Details</h1>
         <form method="post" action="<?php echo site_url("/system-admin/update-school-details"); ?>"  style="width:50%" enctype="multipart/form-data">
             <?php echo Form::label('School Name', 'School Name'); ?>
             <?php echo Form::text('school_name', $result->school_name,array('class'=>"form-control","required"=>"required")); ?>

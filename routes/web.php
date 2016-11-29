@@ -34,6 +34,7 @@ Route::get('/system-admin/driver/edit/{driver_id}',array("middleware","Role:Star
 Route::get('/system-admin/driver/add',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@addDriver"));
 Route::post('/system-admin/edit-driver-details',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@editDriverDetails"));
 Route::post('/system-admin/add-driver-details',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@addDriverDetails"));
+Route::post('/system-admin/driver-mass-upload',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@driversMassUpload"));
 
 //School pages
 Route::get('/system-admin/schools',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@Schools"));
@@ -49,6 +50,7 @@ Route::get('/system-admin/vehicle/edit/{vehicle_id}',array("middleware","Role:St
 Route::post('/system-admin/update-vehicle-details',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@updateVehicleDetails"));
 Route::get('/system-admin/vehicle/add',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@addVehicle"));
 Route::post('/system-admin/add-vehicle-details',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@addVehicleDetails"));
+Route::post('/system-admin/vehicle-mass-upload',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@vehiclesMassUpload"));
 
 
 //Discipline Referral Pages.
@@ -120,10 +122,14 @@ Route::get('/system-admin/threshold-problems',array("middleware","Role:StarsApp"
 Route::post('/system-admin/addThresholdProblem',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@addThresholdProblem"));
 Route::post('/system-admin/updateThresholdProblem',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@updateThresholdProblem"));
 
+//Vehicle Problem
+Route::post('/system-admin/addVehicleProblem',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@addVehicleProblem"));
+
 //Route Types
 Route::get('/system-admin/route-types',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@routeTypes"));
 Route::post('/system-admin/addRouteType',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@addRouteType"));
 Route::post('/system-admin/updateRouteType',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@updateRouteType"));
+Route::get('/uploads/{pdf_folder}/{pdf_file}',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@viewPdfFile"));
 
 
 //Delete Entry from Table & Do proper Redirection
@@ -131,13 +137,14 @@ Route::get('/system-admin/delete/{page}/{table}/{primary_index}/{id}',array("mid
 
 //Webservice for Mobile App.
 Route::get('/web-api/getEntityById/{entity}/{entity_id}',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@getEntityById"));
-Route::get('/web-api/login-driver/{email}/{password}',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@loginDriver"));
+Route::get('/web-api/login-driver/{username}/{password}',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@loginDriver"));
 Route::post('/web-api/create-driver',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@createDriver"));
 Route::post('/web-api/update-driver',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@updateDriver"));
 Route::get('/web-api/getAllEntities/{entity}',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@getAllEntities"));
-Route::post('/web-api/addPreInspection',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@addPreInspection"));  # Not being used
+Route::post('/web-api/addPreInspection',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@addPreInspection"));
 Route::post('/web-api/addTripHistory',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@addTripHistory"));      # Not being used
 Route::post('/web-api/updatePostInspection',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@updatePostInspection"));
+
 
 Route::get('/web-api/getDriverVehiclesById/{driver_id}',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@getDriverVehiclesById"));
 Route::get('/web-api/getAllStudentsBySchool/{school_id}',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@getAllStudentsBySchool"));
@@ -155,3 +162,11 @@ Route::post('/web-api/addMaintenanceIssue/',array("middleware","Role:StarsApp","
 Route::post('/web-api/addDisciplineReferral/',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@addDisciplineReferral"));
 
 Route::get('/web-api/getEntityBySchool/{entity}/{school_id}',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@getEntityBySchool"));
+Route::get('/web-api/getEntityByCondition/{entity}/{col}/{col_id}',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@getEntityByCondition"));
+
+Route::get('/web-api/forgot-password/{username}',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@forgotPassword"));
+Route::post('/web-api/reset-password/',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@resetPassword"));
+
+Route::get('/web-api/seating-chart/{route_id}',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@getSeatingChart"));
+
+Route::post('/web-api/add-special-trip-history',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@addSpecialTripHistory"));  

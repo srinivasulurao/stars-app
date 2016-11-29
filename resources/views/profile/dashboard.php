@@ -23,7 +23,7 @@ echo View::make("profile.sidebar",array('active_link'=>'Dashboard'))->render();
     ?>
     <h1><i class="glyphicon glyphicon-dashboard"></i> Dashboard</h1>
 
-    <div class="col-md-3 panel panel-primary"><h4 class="panel-heading">Total Schools</h4>
+    <div class="col-md-3 panel panel-primary"><h4 class="panel-heading">Total Campuses</h4>
     <div class='panel-body'><label class="badge"><?php echo $total_schools; ?></label></div>
     </div>
     <div class="col-md-3 panel panel-primary"><h4 class="panel-heading">Total Drivers</h4>

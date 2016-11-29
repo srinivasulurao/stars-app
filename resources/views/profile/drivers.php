@@ -22,9 +22,12 @@ echo View::make("profile.sidebar",array('active_link'=>'Drivers'))->render();
 
   //debug($accountDetail);
   ?>
-  <h1>Drivers  <a  href='<?php echo url("system-admin/driver/add"); ?>' class="btn btn-primary" style="float:right">Add New</a></h1>
+  <h1>Drivers  <a  href='<?php echo url("system-admin/driver/add"); ?>' class="btn btn-primary" style="float:right">Add New</a> 
+  <a  href='javascript:void(0)' class="btn btn-primary" style="float:right;margin-right:10px;" data-toggle='modal' data-target='#uploadEntity'>Upload CSV File</a>
+  <a  href='<?php echo str_replace("/public/","/",url('uploads/mass-upload/driver_upload.csv')); ?>' download class="btn btn-primary" style="float:right;margin-right:10px;" >Sample CSV File</a>
+  </h1>
   <table class='table table-striped'>
-  <tr><th>Picture</th><th>Driver Name</th><th>School</th><th>District</th><th> Description</th><th>Total Experience</th><th>Email</th><th>Phone</th></th><th>Action</th></tr>
+  <tr><th style='display:none'>Picture</th><th>First Name</th><th>Last Name</th><th>School</th><th>District</th><th> Description</th><th>Username</th><th style='display:none'>Email</th><th>Phone</th></th><th>Action</th></tr>
   <?php
   $root=Request::root();
   foreach($results as $key):
@@ -34,7 +37,8 @@ echo View::make("profile.sidebar",array('active_link'=>'Drivers'))->render();
     $district=districtName($key->district_id);
     $edit="<a href='$root/system-admin/driver/edit/{$key->driver_id}' class='btn btn-info'><i class='glyphicon glyphicon-edit'></i></a>";
     $delete="<a data-toggle='modal' data-target='#deleteEntity'  href='javascript:void()' data-link='$root/system-admin/delete/drivers/drivers/driver_id/{$key->driver_id}' class='btn btn-danger delete_atrib'><i class='glyphicon glyphicon-trash'></i></a>";
-  echo "<tr><td>$pic</td><td><code>{$key->first_name} {$key->last_name}</code></td><td>{$school}</td><td>{$district}</td><td>{$key->about_driver}</td><td>{$key->total_exp}Year(s)</td><td>{$key->email}</td><td>{$key->phone}</td><td>$edit  $delete</td></tr>";
+    $driver_description=($key->driver_description)?driverDescription($key->driver_description):"";
+  echo "<tr><td style='display:none'>$pic</td><td>{$key->first_name}</td><td> {$key->last_name}</td><td>{$school}</td><td>{$district}</td><td>$driver_description</td><td>{$key->username}</td><td style='display:none'>{$key->email}</td><td>{$key->phone}</td><td>$edit  $delete</td></tr>";
   endforeach;
   ?>
 </table>
@@ -62,6 +66,28 @@ echo View::make("profile.sidebar",array('active_link'=>'Drivers'))->render();
         <input type='hidden' name='del_food_category_id' id='del_food_category_id'>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         <a href='javascript:void(0)' id='deleteEntryButton' class="btn btn-danger">Delete</a>
+      </form>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="uploadEntity" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Upload  Drivers</h4>
+      </div>
+      <div class="modal-body">
+        <form method="post" action='driver-mass-upload' enctype="multipart/form-data">
+        <p>Add Driver using CSV files.</p>
+        <input type='file' name='drivers_csv' id='drivers_csv' required="required" class='form-control'>
+      </div>
+      <div class="modal-footer">
+        <input type='hidden' name='_token' value="<?php echo csrf_token(); ?>">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-info">Upload</button>
       </form>
       </div>
     </div><!-- /.modal-content -->

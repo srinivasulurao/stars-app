@@ -25,6 +25,12 @@ echo View::make('profile.header',array('title'=>$title));
         <form method="post" action="<?php echo site_url("/system-admin/add-trip-history-details"); ?>"  style="width:50%" enctype="multipart/form-data">
             <?php echo Form::label('Route', 'Route'); ?>
             <?php echo Form::select('route_id',getRoutesDropDown(),'', array('class'=>"form-control","required"=>"required")); ?>
+            <?php echo Form::label('Driver', 'Driver'); ?>
+            <?php echo Form::select('driver_id',getDriversDropDown(),'', array('class'=>"form-control","required"=>"required")); ?>
+            <?php echo Form::label('Total Distance', 'Total Distance'); ?>
+            <?php echo Form::number('total_distance','', array('class'=>"form-control","required"=>"required")); ?>
+            <?php echo Form::label('Total Riders', 'Total Riders'); ?>
+            <?php echo Form::number('total_riders','', array('class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('Pre Trip Result', 'Pre Trip Result'); ?>
             <?php echo Form::select('pre_trip',getInspectionResultDropDown(),'',array('class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('Post Trip Result', 'Post Trip Result'); ?>

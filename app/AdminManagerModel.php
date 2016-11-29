@@ -64,7 +64,7 @@ public static function security(){
     }
 
     public static function getAllTripHistory(){
-        $results=DB::table('trip_history')->get();
+        $results=DB::table('trip_history')->join('routes_maps','trip_history.route_id','=','routes_maps.route_id')->get();
         return $results;
     }
 
@@ -122,7 +122,7 @@ public static function security(){
     }
 
     public static function getAllMaintenanceHistory(){
-        $results=DB::table('vehicle_maintenance_history')->get();
+        $results=DB::table('vehicle_maintenance_history')->join('schools','vehicle_maintenance_history.school_id','=','schools.school_id')->get();
         return $results;
     }
 
@@ -182,9 +182,17 @@ public static function security(){
             $details['route_map_attachment']=@implode(",",$attachments);
         endif;
 
+        if (Input::hasFile('seat_arrangement_csv')):
+           $destinationPath = base_path('uploads/seat-arrangement-csv'); // upload path
+           $extension = Input::file('seat_arrangement_csv')->getClientOriginalExtension(); // getting image extension
+           $fileName = md5(time()).'.'.$extension; // renaming.
+           Input::file('seat_arrangement_csv')->move($destinationPath, $fileName); // uploading file to given path
+           $details['seat_arrangement_csv']="/uploads/seat-arrangement-csv/".$fileName;
+       endif;
+
         try {
             DB::table('routes_maps')->insert($details);
-            Session::put('system_message','Route Map Details Added Successfully !');
+            Session::put('system_message','Route Info Details Added Successfully !');
             Session::put('system_message_type','success');
         } catch (\Illuminate\Database\QueryException $e) {
             Session::put('system_message',$e->getMessage());
@@ -220,11 +228,20 @@ public static function security(){
            $details['route_map_attachment']=@implode(",",$attachments);
         endif;
 
+        if (Input::hasFile('seat_arrangement_csv')):
+           $destinationPath = base_path('uploads/seat-arrangement-csv'); // upload path
+           $extension = Input::file('seat_arrangement_csv')->getClientOriginalExtension(); // getting image extension
+           $fileName = md5(time()).'.'.$extension; // renaming.
+           Input::file('seat_arrangement_csv')->move($destinationPath, $fileName); // uploading file to given path
+           $details['seat_arrangement_csv']="/uploads/seat-arrangement-csv/".$fileName;
+       endif;
+
+
         $route_map_id=Input::input('route_map_id');
 
         try {
             DB::table('routes_maps')->where('route_id',$route_map_id)->update($details);
-            Session::put('system_message','Route Map Details Updated Successfully !');
+            Session::put('system_message','Route Info Details Updated Successfully !');
             Session::put('system_message_type','success');
         } catch (\Illuminate\Database\QueryException $e) {
             Session::put('system_message',$e->getMessage());
@@ -254,7 +271,7 @@ public static function security(){
 
         try {
             DB::table('schools')->where('school_id',$school_id)->update($details);
-            Session::put('system_message','School Details Updated Successfully !');
+            Session::put('system_message','Campus Details Updated Successfully !');
             Session::put('system_message_type','success');
         } catch (\Illuminate\Database\QueryException $e) {
             Session::put('system_message',$e->getMessage());
@@ -284,7 +301,7 @@ public static function security(){
 
         try {
             DB::table('schools')->insert($details);
-            Session::put('system_message','School Details Added Successfully !');
+            Session::put('system_message','Campus Details Added Successfully !');
             Session::put('system_message_type','success');
         } catch (\Illuminate\Database\QueryException $e) {
             Session::put('system_message',$e->getMessage());
@@ -308,7 +325,16 @@ public static function security(){
         $details['district_id']=$post->input('district_id');
         $details['school_id']=$post->input('school_id');
         $details['phone']=$post->input('phone');
-        $details['password']="dadsadsa";
+        $details['username']=$post->input('username');
+        $details['security_question']=$post->input('security_question');
+        $details['security_answer']=$post->input('security_answer');
+        $details['driver_description']=$post->input('driver_description');
+        
+        if($post->input('password')):
+        $details['password']=md5($post->input('password'));
+        endif;
+
+       
         if (Input::hasFile('profile_pic')):
             $destinationPath = base_path('uploads/profile-pics'); // upload path
             $extension = Input::file('profile_pic')->getClientOriginalExtension(); // getting image extension
@@ -332,7 +358,7 @@ public static function security(){
         }
     }
 
-
+    
     public static function editDriverDetails($post){
 
         $details=array();
@@ -347,6 +373,15 @@ public static function security(){
         $details['district_id']=$post->input('district_id');
         $details['school_id']=$post->input('school_id');
         $details['phone']=$post->input('phone');
+        $details['username']=$post->input('username');
+        $details['security_question']=$post->input('security_question');
+        $details['security_answer']=$post->input('security_answer');
+        $details['driver_description']=$post->input('driver_description');
+
+        if($post->input('password')):
+        $details['password']=md5($post->input('password'));
+        endif;
+
         if (Input::hasFile('profile_pic')):
             $destinationPath = base_path('uploads/profile-pics'); // upload path
             $extension = Input::file('profile_pic')->getClientOriginalExtension(); // getting image extension
@@ -371,6 +406,113 @@ public static function security(){
 
     }
     
+
+    public static function csvMassUpload(){
+        if (Input::hasFile('drivers_csv')):
+            $destinationPath = base_path('uploads/mass-upload'); // upload path
+            $extension = Input::file('drivers_csv')->getClientOriginalExtension(); // getting image extension
+            $fileName = md5(time()).'.'.$extension; // renameing image
+            Input::file('drivers_csv')->move($destinationPath, $fileName); // uploading file to given path
+            
+
+            //Now Read the csv file & 
+            $file = fopen($destinationPath."/$fileName","r");
+            fgetcsv($file);
+            while(! feof($file))
+              {
+              $data=fgetcsv($file);
+              $details['first_name']=$data[0];
+              $details['last_name']=$data[1];
+              $details['district_id']=self::getDistrictIdByName($data[2]);
+              $details['school_id']=self::getSchoolIdByName($data[3]);
+                 try {
+                        DB::table('drivers')->insert($details);
+                        Session::put('system_message','Drivers List Added Successfully!');
+                        Session::put('system_message_type','success');
+                    } catch (\Illuminate\Database\QueryException $e) {
+                        Session::put('system_message',$e->getMessage());
+                        Session::put('system_message_type','danger');
+                        return false;
+                    } catch (\Exception $e) {
+                        Session::put('system_message',$e->getMessage());
+                        Session::put('system_message_type','danger');
+                        return false;
+                    }
+
+              }
+            fclose($file);
+
+        endif;
+    }
+
+    public static function csvMassUpload2(){
+        if (Input::hasFile('vehicle_csv')):
+            $destinationPath = base_path('uploads/mass-upload'); // upload path
+            $extension = Input::file('vehicle_csv')->getClientOriginalExtension(); // getting image extension
+            $fileName = md5(time()).'.'.$extension; // renameing image
+            Input::file('vehicle_csv')->move($destinationPath, $fileName); // uploading file to given path
+            
+            //Now Read the csv file & 
+            $file = fopen($destinationPath."/$fileName","r");
+            fgetcsv($file);
+            while(! feof($file))
+              {
+              $data=fgetcsv($file);
+              $details['vehicle_no']=$data[0];
+              $details['vehicle_type']=self::getVehicleTypeIdByName($data[1]);
+              
+                 try {
+                        DB::table('vehicles')->insert($details);
+                        Session::put('system_message','Vehicles List Added Successfully!');
+                        Session::put('system_message_type','success');
+                    } catch (\Illuminate\Database\QueryException $e) {
+                        Session::put('system_message',$e->getMessage());
+                        Session::put('system_message_type','danger');
+                        return false;
+                    } catch (\Exception $e) {
+                        Session::put('system_message',$e->getMessage());
+                        Session::put('system_message_type','danger');
+                        return false;
+                    }
+
+              }
+            fclose($file);
+
+        endif;
+    }
+
+    public static function getVehicleTypeIdByName($type){
+
+       if(DB::table('vehicle_type')->where('description',$type)->count()){
+            $result=DB::table('vehicle_type')->where('description',$type)->first();
+            return $result->vehicle_type_id;
+        }
+        else{
+                return "";
+            } 
+    }
+
+    public static function getSchoolIdByName($school_name){
+        
+        if(DB::table('schools')->where('school_name',$school_name)->count()){
+            $result=DB::table('schools')->where('school_name',$school_name)->first();
+            return $result->school_id;
+        }
+        else{
+                return "";
+            }
+    }
+
+    public static function getDistrictIdByName($district_name){
+
+        if(DB::table('districts')->where('district_name',$district_name)->count()){
+            $result=DB::table('districts')->where('district_name',$district_name)->first();
+            return $result->district_id;
+        }
+        else{
+                return "";
+            }
+    }
 
     public static function updateIncidentDetails(){
 
@@ -472,6 +614,9 @@ public static function security(){
        $details['mileage']=Input::input('mileage');
        $details['created_date']=date("Y-m-d H:i:s",strtotime(Input::input('created_date')));
        $details['school_id']=Input::input('school_id');
+       $details['district_id']=Input::input('district_id');
+       $details['vehicle_type']=Input::input('vehicle_type');
+       $details['year_model']=Input::input('year_model');
 
 
        if (Input::hasFile('vehicle_image')):
@@ -512,8 +657,10 @@ public static function security(){
         $details['mileage']=Input::input('mileage');
         $details['created_date']=date("Y-m-d H:i:s",strtotime(Input::input('created_date')));
         $details['school_id']=Input::input('school_id');
-
-
+        $details['district_id']=Input::input('district_id');
+        $details['vehicle_type']=Input::input('vehicle_type');
+        $details['year_model']=Input::input('year_model');
+        
         if (Input::hasFile('vehicle_image')):
             $destinationPath = base_path('uploads/vehicle-pics'); // upload path
             $extension = Input::file('vehicle_image')->getClientOriginalExtension(); // getting image extension
@@ -577,6 +724,7 @@ public static function security(){
         $details['problem_location']=Input::input('problem_location');
         $details['problem']=Input::input('problem');
         $details['comments']=Input::input('comments');
+        $details['completion_status']=Input::input('completion_status');
 
         $issue_id=Input::input('issue_id');
         try {
@@ -603,6 +751,7 @@ public static function security(){
         $details['problem_location']=Input::input('problem_location');
         $details['problem']=Input::input('problem');
         $details['comments']=Input::input('comments');
+        $details['completion_status']=Input::input('completion_status');
 
         try {
             DB::table('vehicle_maintenance_history')->insert($details);
@@ -731,6 +880,11 @@ public static function security(){
         $details['route_id']=Input::input('route_id');
         $details['pre_trip']=Input::input('pre_trip');
         $details['post_trip']=Input::input('post_trip');
+
+        $details['driver_id']=Input::input('driver_id');
+        $details['total_distance']=Input::input('total_distance');
+        $details['total_riders']=Input::input('total_riders');
+
         $details['trip_time']=date("Y-m-d,H:i:s",strtotime(Input::input('trip_time')));
         $details['trip_status']=Input::input('trip_status');
 
@@ -753,6 +907,11 @@ public static function security(){
         $details['route_id']=Input::input('route_id');
         $details['pre_trip']=Input::input('pre_trip');
         $details['post_trip']=Input::input('post_trip');
+
+         $details['driver_id']=Input::input('driver_id');
+        $details['total_distance']=Input::input('total_distance');
+        $details['total_riders']=Input::input('total_riders');
+
         $details['trip_time']=date("Y-m-d,H:i:s",strtotime(Input::input('trip_time')));
         $details['trip_status']=Input::input('trip_status');
         $details['pre_inspection_id']=Input::input('pre_inspection_id');
@@ -844,7 +1003,8 @@ public static function security(){
       $details=array();
       $details['threshold']=$post['threshold'];
       $details['threshold_value']=$post['threshold_value'];
-      $details['school_id']=$post['school_id'];
+      $details['vehicle_type']=$post['vehicle_type'];
+      
       
      try {
             DB::table('school_vehicle_threshold')->insert($details);
@@ -863,7 +1023,7 @@ public static function security(){
        $details=array();
       $details['threshold']=$post['threshold'];
       $details['threshold_value']=$post['threshold_value'];
-      $details['school_id']=$post['school_id'];
+      $details['vehicle_type']=$post['vehicle_type'];
       
      try {
             DB::table('school_vehicle_threshold')->where('threshold_id',$post['threshold_id'])->update($details);
@@ -878,6 +1038,25 @@ public static function security(){
         }
    }
 
+//Vehicle Problem
+
+   public static function addVehicleProblemModel($post){
+      $details=array();
+      $details['description']=$post['description'];
+      
+      
+     try {
+            DB::table('vehicle_problem')->insert($details);
+            Session::put('system_message','Vehicle Problem Added Successfully !');
+            Session::put('system_message_type','success');
+        } catch (\Illuminate\Database\QueryException $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        } catch (\Exception $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        }
+   }
 
 //Route Types
    public static function addRouteTypeModel($post){

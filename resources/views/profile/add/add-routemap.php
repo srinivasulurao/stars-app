@@ -5,7 +5,7 @@ echo View::make('profile.header',array('title'=>$title));
 <div class='container profile-container'>
     <div class='col-md-2 sidebar'>
         <?php
-        echo View::make("profile.sidebar",array('active_link'=>'Route Maps'))->render();
+        echo View::make("profile.sidebar",array('active_link'=>'Route Info'))->render();
         ?>
     </div>
     <!-- Entire content to be shown here -->
@@ -21,7 +21,7 @@ echo View::make('profile.header',array('title'=>$title));
 
         //debug($accountDetail);
         ?>
-        <h1>Add Route Map Details</h1>
+        <h1>Add Route Info Details</h1>
         <form method="post" action="<?php echo site_url("/system-admin/add-route-map-details"); ?>"  style="width:50%" enctype="multipart/form-data">
             <?php echo Form::label('Route Name', 'Route Name'); ?>
             <?php echo Form::text('route_name', '',array('class'=>"form-control","required"=>"required")); ?>
@@ -29,6 +29,7 @@ echo View::make('profile.header',array('title'=>$title));
             <?php echo Form::select('school_id',getSchoolsDropDown(),'',array('class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('District', 'District'); ?>
             <?php echo Form::select('district_id',getDistrictsDropDown(),'',array('class'=>"form-control","required"=>"required")); ?>
+            <!--
             <?php echo Form::label('Route Start Latitude', 'Route Start Latitude'); ?>
             <?php echo Form::text('route_start_latitude', '',array('class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('Route Start Longitude', 'Route Start Longitude'); ?>
@@ -37,8 +38,11 @@ echo View::make('profile.header',array('title'=>$title));
             <?php echo Form::text('route_end_latitude', '',array('class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('Route End Longitude', 'Route End Longitude'); ?>
             <?php echo Form::text('route_end_longitude','',array('class'=>"form-control","required"=>"required")); ?>
+            -->
             <?php echo Form::label('Route Type', 'Route Type'); ?>
             <?php echo Form::select('route_type',getRouteTypeDropDown(),'',array('class'=>"form-control","required"=>"required")); ?>
+            <?php echo Form::label('Seat Arrangement CSV', 'Seat Arrangement CSV'); ?>
+            <?php echo Form::file('seat_arrangement_csv'); ?>
             <?php echo Form::label('Route Map Attachments', 'Route Map Attachments (Use CTRL+  to multi-select attachments)'); ?>
             <?php echo Form::file('route_map_attachment[]',array('multiple'=>"multiple","required"=>"required")); ?>
 

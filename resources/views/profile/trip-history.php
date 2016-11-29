@@ -20,22 +20,25 @@ echo View::make("profile.sidebar",array('active_link'=>'Trip History'))->render(
     Session::forget('system_message_type');
   endif;
 
-  //debug($accountDetail);
+  //debug($results);
+  //exit;
   ?>
   <h1>Trip History <a  href='<?php echo url("system-admin/pre-trip-survey"); ?>' class="btn btn-primary" style="float:right">Add New</a></h1>
   <table class='table table-striped'>
-  <tr><th>ID</th><th>Route</th><th>Trip Time</th><th>Pre Trip Inspection</th><th>Post Trip Inspection</th><th>Pre Trip Result</th><th>Post Trip Result</th><th>Trip Status</th><th>Action</th></tr>
+  <tr><th>ID</th><th>Route</th><th>Driver</th><th>Route Type</th><th>Trip Time</th><th>Pre Trip Inspection</th><th>Post Trip Inspection</th><th>Trip Status</th><th>Action</th></tr>
   <?php
   $root=Request::root();
   foreach($results as $key):
     
     $route=routeName($key->route_id);
     $trip_time=date("Y/m/d H:i A",strtotime($key->trip_time));
+    $driver=DriverName($key->driver_id);
+    $route_type=routeType($key->route_type);
     $edit="<a href='$root/system-admin/trip-history/edit/{$key->trip_id}' class='btn btn-info'><i class='glyphicon glyphicon-edit'></i></a>";
      $delete="<a data-toggle='modal' data-target='#deleteEntity'  href='javascript:void()' data-link='$root/system-admin/delete/trip-history/trip_history/trip_id/{$key->trip_id}' class='btn btn-danger delete_atrib'><i class='glyphicon glyphicon-trash'></i></a>";
-    $view_pre="<a href='$root/system-admin/view-pre-trip-inspection/{$key->pre_inspection_id}' class='label label-primary' target='_blank'>View</a>";
-    $view_post="<a href='$root/system-admin/view-post-trip-inspection/{$key->post_inspection_id}' class='label label-primary' target='_blank'>View</a>";
-  echo "<tr><td>{$key->trip_id}</td><td><code>{$route}</code></td><td>{$trip_time}</td><td>$view_pre</td><td>$view_post</td><td>{$key->pre_trip}</td><td>{$key->post_trip}</td><td>{$key->trip_status}</td><td>$edit  $delete</td></tr>";
+    $view_pre="<a href='$root/system-admin/view-pre-trip-inspection/{$key->pre_inspection_id}' class='label label-primary' target='_blank'>{$key->pre_trip}</a>";
+    $view_post="<a href='$root/system-admin/view-post-trip-inspection/{$key->post_inspection_id}' class='label label-primary' target='_blank'>{$key->post_trip}</a>";
+  echo "<tr><td>{$key->trip_id}</td><td><code>{$route}</code></td><td>$driver</td><td>$route_type</td><td>{$trip_time}</td><td>$view_pre</td><td>$view_post</td><td>{$key->trip_status}</td><td>$edit  $delete</td></tr>";
   endforeach;
   ?>
 </table>

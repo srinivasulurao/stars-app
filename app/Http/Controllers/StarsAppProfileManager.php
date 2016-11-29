@@ -14,6 +14,7 @@ use App\AdminManagerModel;
 use Input;
 use Session;
 use Redirect;
+use Response;
 
 class StarsAppProfileManager extends Controller
 {
@@ -35,7 +36,7 @@ function __construct(Request $request){
       $data['total_drivers']=AdminManagerModel::getTotalEntities('drivers');
       $data['total_vehicles']=AdminManagerModel::getTotalEntities('vehicles');
 
-      $data['total_incidents']=AdminManagerModel::getTotalEntities('schools');
+      $data['total_incidents']=AdminManagerModel::getTotalEntities('incidents');
       $data['total_dr']=AdminManagerModel::getTotalEntities('discipline_referrals');
       $data['total_mi']=AdminManagerModel::getTotalEntities('vehicle_maintenance_history');
 
@@ -84,18 +85,26 @@ function __construct(Request $request){
         return Redirect::to('/system-admin/drivers');
     }
 
+    public function driversMassUpload(){
+        AdminManagerModel::csvMassUpload();
+        return Redirect::to('/system-admin/drivers');
+    }
+    public function vehiclesMassUpload(){
+        AdminManagerModel::csvMassUpload2();
+        return Redirect::to('/system-admin/vehicles');
+    }
 ##################################################
 //School Stuff    
 ##################################################
 
     public function schools(){
-        $data['title']="StarsApp-Schools";
+        $data['title']="StarsApp-Campuses";
         $data['results']=AdminManagerModel::getAllSchools();
         return view('profile.schools',$data);
     }
 
         public function updateSchool($school_id){
-        $data['title']="StarsApp-Update School Details";
+        $data['title']="StarsApp-Update Campus Details";
         $data['result']=AdminManagerModel::getSchoolById($school_id);
         $data['school_id']=$school_id;
         return view('profile.edit.edit-school',$data);
@@ -108,7 +117,7 @@ function __construct(Request $request){
     }
 
     public function addSchool(){
-        $data['title']="StarsApp-Add New School";
+        $data['title']="StarsApp-Add New Campus";
         return view('profile.add.add-school',$data);
     }
 
@@ -222,12 +231,12 @@ function __construct(Request $request){
 ##################################################
 
     public function routeMaps(){
-        $data['title']="StarsApp-Route Maps";
+        $data['title']="StarsApp-Route Info";
         $data['results']=AdminManagerModel::getAllRoutes();
         return view('profile.route-maps',$data);
     }
     public function updateRouteMap($route_map_id){
-        $data['title']="StarsApp-Update Route-Map Details";
+        $data['title']="StarsApp-Update Route Details";
         $data['result']=AdminManagerModel::getRouteMapById($route_map_id);
         $data['route_map_id']=$route_map_id;
         return view('profile.edit.edit-routemap',$data);
@@ -240,7 +249,7 @@ function __construct(Request $request){
     }
 
     public function addRouteMap(){
-        $data['title']="StarsApp-Add New Route Map";
+        $data['title']="StarsApp-Add New Route";
         return view('profile.add.add-routemap',$data);
     }
     public function addRouteMapDetails(){
@@ -445,7 +454,7 @@ public function deleteSingleEntity($page,$table,$primary_index,$id){
 
 //Threshold Problems
 public function thresholdProblems(){
-    $data['title']="StarsApp-Threshold Problems";
+    $data['title']="StarsApp-Maintenance Threshold Settings";
     $data['results']=AdminManagerModel::getAllThresholdProblems();
     return view('profile.threshold-problems',$data); 
 }
@@ -460,6 +469,13 @@ public function updateThresholdProblem(){
     return Redirect::to("system-admin/threshold-problems");
 }
 
+//Vehicle Problem
+public function addVehicleProblem(){
+    AdminManagerModel::addVehicleProblemModel(Input::all());
+    return Redirect::to("system-admin/maintenance-history");
+}
+
+
 //Route Types
 
 public function routeTypes(){
@@ -473,9 +489,20 @@ public function addRouteType(){
     return Redirect::to("system-admin/route-types");
 }
 
-public function updateRouteType(){
+public function updateRouteType()
+{
     AdminManagerModel::updateRouteTypeModel(Input::all());
     return Redirect::to("system-admin/route-types");
 }
 
-}//Model Class Ends here.
+public function viewPdfFile($folder,$filename){
+//http://demo.appddictionstudio.biz/stars-app/public/uploads/route-maps/e3f88ecdf470f3f35264e24c4ddf66811479476920.pdf
+$path = base_path("uploads/".$folder."/".$filename);
+return Response::make(file_get_contents($path), 200, [
+    'Content-Type' => 'application/pdf',
+    'Content-Disposition' => 'inline; filename="'.$filename.'"'
+]);
+
+}
+
+}//Controller Class Ends here.

@@ -27,28 +27,37 @@ echo View::make('profile.header',array('title'=>$title));
             <?php echo Form::text('first_name','',array('class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('Last Name', 'Last Name'); ?>
             <?php echo Form::text('last_name','',array('class'=>"form-control","required"=>"required")); ?>
+            <?php echo Form::label('Username', 'Username'); ?>
+            <?php echo Form::text('username','',array('class'=>"form-control")); ?>
+            <!--
             <?php echo Form::label('email', 'E-Mail Address'); ?>
-            <?php echo Form::text('email', '',array('class'=>"form-control","required"=>"required")); ?>
+            <?php echo Form::text('email', '',array('class'=>"form-control")); ?>     
             <?php echo Form::label('Password', 'Password'); ?>
             <?php echo Form::password('password',array('class'=>"form-control","autocomplete"=>"off")); ?>
             <?php echo Form::label('Total Experience', 'Total Experience'); ?>
-            <?php echo Form::text('total_exp','',array('class'=>"form-control","required"=>"required")); ?>
-            <?php echo Form::label('About Driver', 'About Driver'); ?>
-            <?php echo Form::textarea('about_driver','',array('class'=>"form-control","required"=>"required","rows"=>5)); ?>
+            <?php echo Form::text('total_exp','',array('class'=>"form-control")); ?>
             <?php echo Form::label('City', 'City'); ?>
             <?php echo Form::text('city', '',array('class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('State', 'State'); ?>
-            <?php echo Form::text('state','',array('class'=>"form-control","required"=>"required")); ?>
+            <?php echo Form::text('state','',array('class'=>"form-control")); ?>
             <?php echo Form::label('Address', 'Address'); ?>
-            <?php echo Form::textarea('address', '',array('class'=>"form-control","required"=>"required","rows"=>5)); ?>
+            <?php echo Form::textarea('address', '',array('class'=>"form-control","rows"=>5)); ?>
+            -->
+            <?php echo Form::label('Driver Description', 'Driver Description'); ?>
+            <?php echo Form::select('driver_description',getDriverDescriptionDropDown(),'',array('class'=>"form-control")); ?>           
+            <?php echo Form::label('Security Question', 'Security Question'); ?>
+            <?php echo Form::select('security_question',securityQuestionsDropDown(),'',array('class'=>"form-control")); ?>
+            <?php echo Form::label('Security Answer', 'Security Answer'); ?>
+            <?php echo Form::text('security_answer','',array('class'=>"form-control")); ?>
+
             <?php echo Form::label('District', 'District'); ?>
             <?php echo Form::select('district_id',getDistrictsDropDown(),'',array('class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('School', 'School'); ?>
             <?php echo Form::select('school_id',getSchoolsDropDown(),'',array('class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('Phone', 'Phone'); ?>
-            <?php echo Form::text('phone','',array('class'=>"form-control","required"=>"required")); ?>
+            <?php echo Form::text('phone','',array('class'=>"form-control")); ?>
             <?php echo Form::label('Picture', 'Picture'); ?>
-            <?php echo Form::file('profile_pic',array('required'=>"required")); ?>
+            <?php echo Form::file('profile_pic',array('id'=>"picture")); ?>
 
             <?php echo Form::token(); ?><br>
             <?php echo Form::submit('Submit',array('class'=>"btn btn-success","required"=>"required")); ?>

@@ -19,10 +19,13 @@ echo view('profile.sidebar',array('active_link'=>'Vehicles'));
         Session::forget('system_message_type');
     endif;
     ?>
-    <h1>Authorized Vehicles<a  href='<?php echo url('system-admin/vehicle/add'); ?>' class="btn btn-primary" style="float:right">Add New</a></h1>
+    <h1>Authorized Vehicles<a  href='<?php echo url('system-admin/vehicle/add'); ?>' class="btn btn-primary" style="float:right">Add New</a>
+<a  href='javascript:void(0)' class="btn btn-primary" style="float:right;margin-right:10px;" data-toggle='modal' data-target='#uploadEntity'>Upload CSV File</a>
+  <a  href='<?php echo str_replace("/public/","/",url('uploads/mass-upload/vehicle_upload.csv')); ?>' download class="btn btn-primary" style="float:right;margin-right:10px;" >Sample CSV File</a>
+    </h1>
 
     <table class='table table-striped'>
-        <tr><th>Vehicle Picture</th><th>Vehicle Name</th><th>Vehicle No.</th><th>Mileage</th><th>Occupancy</th><th>School</th><th>Authorized Drivers</th><th>Seating CSV</th><th>Action</th></tr>
+        <tr><th style="display: none;">Vehicle Picture</th><th style='display: none;'>Vehicle Name</th><th>Vehicle No.</th><th>Vehicle Type</th><th>Vehicle Mileage</th><th>Occupancy</th><th>Year Model</th><th style='display: none;'>School</th><th style='display: none;'>Authorized Drivers</th><th style='display: none;'>Seating CSV</th><th>Action</th></tr>
         <?php
         $root=Request::root();
         foreach($results as $key):
@@ -35,8 +38,9 @@ echo view('profile.sidebar',array('active_link'=>'Vehicles'));
             $authorized_explode=explode(",",$key->authorized_drivers);
             $authorized_explode=array_map('driverName',$authorized_explode);
             $authorized_drivers=@implode(", ", $authorized_explode);
+            $vehicle_type=vehicleType($key->vehicle_type);
             $view="<a href='$seat_arrangement_csv' class='label label-success' download>View</a>";
-            echo "<tr><td>$pic</td><td><code>{$key->vehicle_name}</code></td><td><code>{$key->vehicle_no}</code></td><td>{$key->mileage}</td><td>$key->occupancy</td><td>$school</td><td>$authorized_drivers</td><td>$view</td><td>$edit  $delete</td></tr>";
+            echo "<tr><td style='display: none;'>$pic</td><td style='display: none;'><code>{$key->vehicle_name}</code></td><td><code>{$key->vehicle_no}</code></td><td>$vehicle_type</td><td>{$key->mileage}</td><td>{$key->occupancy}</td><td>{$key->year_model}</td><td style='display: none;'>$school</td><td style='display: none;'>$authorized_drivers</td><td style='display: none;'>$view</td><td>$edit  $delete</td></tr>";
         endforeach;
         ?>
     </table>
@@ -62,6 +66,28 @@ echo view('profile.sidebar',array('active_link'=>'Vehicles'));
         <input type='hidden' name='del_food_category_id' id='del_food_category_id'>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         <a href='javascript:void(0)' id='deleteEntryButton' class="btn btn-danger">Delete</a>
+      </form>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="uploadEntity" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Upload  Vehicles</h4>
+      </div>
+      <div class="modal-body">
+        <form method="post" action='vehicle-mass-upload' enctype="multipart/form-data">
+        <p>Add Vehicles using CSV files.</p>
+        <input type='file' name='vehicle_csv' id='vehicle_csv' required="required" class='form-control'>
+      </div>
+      <div class="modal-footer">
+        <input type='hidden' name='_token' value="<?php echo csrf_token(); ?>">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-info">Upload</button>
       </form>
       </div>
     </div><!-- /.modal-content -->

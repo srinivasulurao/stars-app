@@ -27,30 +27,40 @@ echo View::make('profile.header',array('title'=>$title));
             <?php echo Form::text('first_name', $result->first_name,array('class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('Last Name', 'Last Name'); ?>
             <?php echo Form::text('last_name', $result->last_name,array('class'=>"form-control","required"=>"required")); ?>
+            <?php echo Form::label('Username', 'Username'); ?>
+            <?php echo Form::text('username',$result->username,array('class'=>"form-control")); ?>
+            <!--
             <?php echo Form::label('email', 'E-Mail Address'); ?>
-            <?php echo Form::text('email', $result->email,array('class'=>"form-control","required"=>"required")); ?>
+            <?php echo Form::text('email', $result->email,array('class'=>"form-control")); ?>
             <?php echo Form::label('Password', 'Password'); ?>
             <?php echo Form::password('password',array('class'=>"form-control","autocomplete"=>"off")); ?>
             <?php echo Form::label('Total Experience', 'Total Experience'); ?>
-            <?php echo Form::text('total_exp', $result->total_exp,array('class'=>"form-control","required"=>"required")); ?>
-            <?php echo Form::label('About Driver', 'About Driver'); ?>
-            <?php echo Form::textarea('about_driver', $result->about_driver,array('class'=>"form-control","required"=>"required","rows"=>5)); ?>
+            <?php echo Form::text('total_exp', $result->total_exp,array('class'=>"form-control")); ?>
             <?php echo Form::label('City', 'City'); ?>
-            <?php echo Form::text('city', $result->city,array('class'=>"form-control","required"=>"required")); ?>
+            <?php echo Form::text('city', $result->city,array('class'=>"form-control")); ?>
             <?php echo Form::label('State', 'State'); ?>
-            <?php echo Form::text('state', $result->state,array('class'=>"form-control","required"=>"required")); ?>
+            <?php echo Form::text('state', $result->state,array('class'=>"form-control")); ?>
             <?php echo Form::label('Address', 'Address'); ?>
-            <?php echo Form::textarea('address', $result->address,array('class'=>"form-control","required"=>"required","rows"=>5)); ?>
+            <?php echo Form::textarea('address', $result->address,array('class'=>"form-control","rows"=>5)); ?>
+            -->
+            <?php echo Form::label('Driver Description', 'Driver Description'); ?>
+            <?php echo Form::select('driver_description',getDriverDescriptionDropDown(),$result->driver_description,array('class'=>"form-control")); ?>
+            <?php echo Form::label('Security Question', 'Security Question'); ?>
+            <?php echo Form::select('security_question',securityQuestionsDropDown(),$result->security_question,array('class'=>"form-control")); ?>
+            <?php echo Form::label('Security Answer', 'Security Answer'); ?>
+            <?php echo Form::text('security_answer', $result->security_answer,array('class'=>"form-control")); ?>
+
             <?php echo Form::label('District', 'District'); ?>
             <?php echo Form::select('district_id',getDistrictsDropDown(),$result->district_id,array('class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('School', 'School'); ?>
             <?php echo Form::select('school_id',getSchoolsDropDown(),$result->school_id,array('class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('Phone', 'Phone'); ?>
-            <?php echo Form::text('phone', $result->phone,array('class'=>"form-control","required"=>"required")); ?>
+            <?php echo Form::text('phone', $result->phone,array('class'=>"form-control")); ?>
             <?php echo Form::label('Picture', 'Picture'); ?>
-            <?php echo Form::file('profile_pic'); ?>
+            <?php echo Form::file('profile_pic');?>
+            <?php if($result->profile_pic): ?>
             <img style="height:70px;" class="thumbnail" src="<?php echo str_replace("/public","",url($result->profile_pic)); ?>" />
-
+            <?php endif; ?>
 
 
             <?php echo Form::hidden('driver_id',$driver_id); ?>
