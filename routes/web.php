@@ -149,6 +149,10 @@ Route::get('/system-admin/delete/{page}/{table}/{primary_index}/{id}',array("mid
 //Billing 
 Route::get('billing-admin/dashboard',array("middleware","Role:StarsApp","uses"=>"StarsAppBillingManager@invoices"));
 Route::get('billing-admin/pricing',array("middleware","Role:StarsApp","uses"=>"StarsAppBillingManager@pricing"));
+Route::get('billing-admin/pricing/edit/{district_id}',array("middleware","Role:StarsApp","uses"=>"StarsAppBillingManager@setPricing"));
+Route::post('billing-admin/save-pricing',array("middleware","Role:StarsApp","uses"=>"StarsAppBillingManager@savePricing"));
+Route::post('billing-admin/add-district',array("middleware","Role:StarsApp","uses"=>"StarsAppBillingManager@addDistrict"));
+Route::get('billing-admin/delete/{page}/{table}/{primary_id}/{entity_id}',array("middleware","Role:StarsApp","uses"=>"StarsAppBillingManager@deleteEntity"));
 
 #############################################################################################
 //##############################Webservice for Mobile App.###################################

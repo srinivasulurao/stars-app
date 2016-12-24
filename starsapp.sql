@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost:3306
--- Generation Time: Dec 22, 2016 at 06:34 AM
+-- Generation Time: Dec 24, 2016 at 03:24 PM
 -- Server version: 5.6.30-cll-lve
 -- PHP Version: 5.6.20
 
@@ -33,16 +33,18 @@ CREATE TABLE IF NOT EXISTS `admin` (
   `last_login` datetime DEFAULT NULL,
   `acount_active` int(11) DEFAULT NULL,
   `admin_id` int(11) NOT NULL AUTO_INCREMENT,
+  `redirection` enum('dashboard','billing') NOT NULL DEFAULT 'dashboard',
   PRIMARY KEY (`admin_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `admin`
 --
 
-INSERT INTO `admin` (`email`, `password`, `display_name`, `last_login`, `acount_active`, `admin_id`) VALUES
-('tporter@appddictionstudio.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Tim Porter', '2016-09-13 00:00:00', 1, 1),
-('rrapstine@appddictionstudio.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Rick Rapstine', '0000-00-00 00:00:00', 1, 2);
+INSERT INTO `admin` (`email`, `password`, `display_name`, `last_login`, `acount_active`, `admin_id`, `redirection`) VALUES
+('tporter@appddictionstudio.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Tim Porter', '2016-09-13 00:00:00', 1, 1, 'dashboard'),
+('rrapstine@appddictionstudio.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Rick Rapstine', '0000-00-00 00:00:00', 1, 2, 'dashboard'),
+('doru.arfire.1279@gmail.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'Doru Arfire', '2016-12-08 00:00:00', 1, 3, 'billing');
 
 -- --------------------------------------------------------
 
@@ -87,7 +89,7 @@ CREATE TABLE IF NOT EXISTS `discipline_referrals` (
   `comments` varchar(2000) DEFAULT NULL,
   `parents_notified` enum('yes','no') DEFAULT NULL,
   PRIMARY KEY (`complaint_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=27 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=29 ;
 
 --
 -- Dumping data for table `discipline_referrals`
@@ -117,7 +119,9 @@ INSERT INTO `discipline_referrals` (`complaint_id`, `school_id`, `driver_id`, `s
 (23, 4, 53, 'Dwayne Johnson', '1', '2016-12-07 12:10:00', 'America', 1, 'Good', NULL),
 (24, 4, 48, 'Timothy Porter', '1', '2016-12-07 16:17:00', 'America', 1, 'Good', NULL),
 (25, 1, 88, 'Dwayne Johnson', '1', '2016-12-19 09:33:00', '', 13, 'Test', NULL),
-(26, 1, 88, 'Dwayne Johnson', '1', '2016-12-19 09:33:00', '', 13, 'Test', NULL);
+(26, 1, 88, 'Dwayne Johnson', '1', '2016-12-19 09:33:00', '', 13, 'Test', NULL),
+(27, 1, 84, 'Timothy', 'Bullying', '2016-12-23 23:37:00', '', 1, 'test', NULL),
+(28, 1, 84, 'Timothy', 'Bullying', '2016-12-23 23:44:00', '', 1, 'test', NULL);
 
 -- --------------------------------------------------------
 
@@ -130,7 +134,7 @@ CREATE TABLE IF NOT EXISTS `districts` (
   `district_name` varchar(200) NOT NULL,
   `state` varchar(50) NOT NULL,
   PRIMARY KEY (`district_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
 
 --
 -- Dumping data for table `districts`
@@ -168,7 +172,7 @@ CREATE TABLE IF NOT EXISTS `drivers` (
   `security_answer` varchar(100) DEFAULT NULL,
   `profile_pic` varchar(2000) DEFAULT NULL,
   PRIMARY KEY (`driver_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=111 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=112 ;
 
 --
 -- Dumping data for table `drivers`
@@ -245,7 +249,8 @@ INSERT INTO `drivers` (`driver_id`, `first_name`, `last_name`, `username`, `emai
 (107, 'no', 'I''ll', 'boo', NULL, '202cb962ac59075b964b07152d234b70', NULL, NULL, NULL, 'MD', NULL, 2, 5, '234425', 1, 1, 'cd', '/uploads/profile-pics/584bb3ada18c7.png'),
 (108, 'Tamil', 'Arasi', 'Tamil', NULL, '202cb962ac59075b964b07152d234b70', NULL, NULL, NULL, 'TX', NULL, 1, 1, '65466549', 1, 1, 'meow', '/uploads/profile-pics/584e321f381c9.png'),
 (109, 'anand', 'gour', 'anand', NULL, '763de4a6661f411e79bec5e6673e20a1', NULL, NULL, NULL, 'TX', NULL, 1, 1, NULL, 1, 1, 'sdfsdf', '/uploads/profile-pics/5851a4efd3147.png'),
-(110, 'anand', 'gour', 'anand', NULL, '763de4a6661f411e79bec5e6673e20a1', NULL, NULL, NULL, 'TX', NULL, 1, 1, NULL, 4, 6, 'cricket', NULL);
+(110, 'anand', 'gour', 'anand', NULL, '763de4a6661f411e79bec5e6673e20a1', NULL, NULL, NULL, 'TX', NULL, 1, 1, NULL, 4, 6, 'cricket', NULL),
+(111, 'small', 'small', 'small', NULL, 'eb5c1399a871211c7e7ed732d15e3a8b', NULL, NULL, NULL, 'MD', NULL, 2, 2, NULL, 4, 4, 'small', NULL);
 
 -- --------------------------------------------------------
 
@@ -360,6 +365,32 @@ CREATE TABLE IF NOT EXISTS `pre_inspection` (
   `engine_start` enum('pass','fail') NOT NULL DEFAULT 'pass',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pricing`
+--
+
+CREATE TABLE IF NOT EXISTS `pricing` (
+  `pricing_id` int(200) NOT NULL AUTO_INCREMENT,
+  `district_id` int(200) DEFAULT NULL,
+  `school_id` int(200) DEFAULT NULL,
+  `discount` varchar(200) DEFAULT NULL,
+  `enrollment` varchar(200) DEFAULT NULL,
+  `price` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`pricing_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+
+--
+-- Dumping data for table `pricing`
+--
+
+INSERT INTO `pricing` (`pricing_id`, `district_id`, `school_id`, `discount`, `enrollment`, `price`) VALUES
+(1, 4, 1, '89', 'test1', '100'),
+(2, 4, 3, '78', 'test2', '120'),
+(3, 2, 5, NULL, NULL, NULL),
+(4, 1, 4, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -594,7 +625,7 @@ CREATE TABLE IF NOT EXISTS `trip_history` (
   KEY `vehicle_id` (`vehicle_id`),
   KEY `driver_id` (`driver_id`),
   KEY `route_id` (`route_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=257 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=259 ;
 
 --
 -- Dumping data for table `trip_history`
@@ -640,7 +671,9 @@ INSERT INTO `trip_history` (`trip_id`, `route_id`, `school_id`, `driver_id`, `ve
 (253, NULL, NULL, 107, 1, 963, 964, 23, 444, 'complete', '2016-12-10 13:21:00', 3, 'pass', 'pass', NULL, NULL, 'Nice'),
 (254, 1, NULL, 108, 6, 965, 966, 5, 30000, 'complete', '2016-12-12 09:43:00', 9, 'pass', 'pass', NULL, NULL, 'Nice'),
 (255, NULL, NULL, 108, 1, 967, 968, 25, NULL, 'ongoing', NULL, NULL, 'pass', 'pass', 'Tamilnadu', 'single', 'great to go'),
-(256, NULL, NULL, 108, 1, 967, 968, 25, 3000, 'complete', '2016-12-12 09:44:00', 3, 'pass', 'pass', NULL, NULL, 'Nice');
+(256, NULL, NULL, 108, 1, 967, 968, 25, 3000, 'complete', '2016-12-12 09:44:00', 3, 'pass', 'pass', NULL, NULL, 'Nice'),
+(257, 1, NULL, 39, 9, 1005, 1006, 14, 0, 'complete', '0000-12-22 16:15:30', NULL, 'pass', 'pass', NULL, NULL, NULL),
+(258, 1, NULL, 39, 9, 1005, 1006, 14, 0, 'complete', '0000-12-22 16:15:41', NULL, 'pass', 'pass', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -654,7 +687,7 @@ CREATE TABLE IF NOT EXISTS `trip_inspections` (
   `comments` varchar(2000) DEFAULT NULL,
   `odometer_reading` int(11) DEFAULT NULL,
   PRIMARY KEY (`inspection_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1005 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1025 ;
 
 --
 -- Dumping data for table `trip_inspections`
@@ -1651,7 +1684,27 @@ INSERT INTO `trip_inspections` (`inspection_id`, `inspection_data`, `comments`, 
 (1001, 'YToxOntzOjY6IihudWxsKSI7czowOiIiO30=', '', 999999),
 (1002, '', '', NULL),
 (1003, 'YToxOntzOjY6IihudWxsKSI7czowOiIiO30=', '', 3544),
-(1004, '', '', NULL);
+(1004, '', '', NULL),
+(1005, 'YToxOntzOjIyOiJwcmVfaW5zcGVjdGlvbl9zdGVwX2lkIjtzOjE6IjQiO30=', '', 423444),
+(1006, 'YTowOnt9', '', 423444),
+(1007, 'YTozNjp7aToxMDtzOjI6Im5vIjtpOjExO3M6Mjoibm8iO2k6MTI7czozOiJ5ZXMiO2k6MTM7czozOiJ5ZXMiO2k6MTQ7czozOiJ5ZXMiO2k6MTU7czozOiJ5ZXMiO2k6MTY7czozOiJ5ZXMiO2k6MTc7czozOiJ5ZXMiO2k6MTg7czozOiJ5ZXMiO2k6MTk7czozOiJ5ZXMiO2k6MjA7czozOiJ5ZXMiO2k6MjE7czozOiJ5ZXMiO2k6MjI7czozOiJ5ZXMiO2k6MjM7czozOiJ5ZXMiO2k6MjQ7czozOiJ5ZXMiO2k6MjU7czozOiJ5ZXMiO2k6MjY7czozOiJ5ZXMiO2k6Mjc7czozOiJ5ZXMiO2k6Mjg7czozOiJ5ZXMiO2k6Mjk7czozOiJ5ZXMiO2k6MzA7czozOiJ5ZXMiO2k6MzE7czozOiJ5ZXMiO2k6MzI7czozOiJ5ZXMiO2k6MzM7czozOiJ5ZXMiO2k6MzQ7czozOiJ5ZXMiO2k6MzU7czozOiJ5ZXMiO2k6MzY7czozOiJ5ZXMiO2k6Mzc7czozOiJ5ZXMiO2k6Mzg7czozOiJ5ZXMiO2k6Mzk7czozOiJ5ZXMiO2k6NDtzOjI6Im5vIjtpOjQwO3M6MzoieWVzIjtpOjQxO3M6MzoieWVzIjtpOjQyO3M6MzoieWVzIjtpOjQzO3M6MzoieWVzIjtpOjQ0O3M6MzoieWVzIjt9', 'Aaa', 992574),
+(1008, '', '', NULL),
+(1009, 'YToxOntzOjY6IihudWxsKSI7czowOiIiO30=', '', 3444),
+(1010, '', '', NULL),
+(1011, 'YToxOntzOjY6IihudWxsKSI7czowOiIiO30=', '', 3444),
+(1012, '', '', NULL),
+(1013, 'YToxOntzOjY6IihudWxsKSI7czowOiIiO30=', '', 3444),
+(1014, '', '', NULL),
+(1015, 'YToxOntzOjY6IihudWxsKSI7czowOiIiO30=', '', 999999),
+(1016, '', '', NULL),
+(1017, 'YTowOnt9', NULL, 3444),
+(1018, 'YTowOnt9', NULL, 3444),
+(1019, 'YTowOnt9', NULL, 3444),
+(1020, 'YTowOnt9', NULL, 3444),
+(1021, 'YTowOnt9', NULL, 3444),
+(1022, 'YTowOnt9', NULL, 3444),
+(1023, 'YTowOnt9', NULL, 3444),
+(1024, 'YTowOnt9', NULL, 3444);
 
 -- --------------------------------------------------------
 
@@ -1774,7 +1827,7 @@ CREATE TABLE IF NOT EXISTS `vehicle_maintenance_history` (
   `comments` varchar(2000) NOT NULL,
   `completion_status` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`issue_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=24 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=28 ;
 
 --
 -- Dumping data for table `vehicle_maintenance_history`
@@ -1800,7 +1853,11 @@ INSERT INTO `vehicle_maintenance_history` (`issue_id`, `school_id`, `vehicle_id`
 (20, 1, 1, 1, '2016-10-10 08:30:00', 1, 'Utah', 'Discipline Referral Comments', 0),
 (21, 1, 1, 1, '2016-10-10 08:30:00', 1, 'Cell', 'Discipline Referral Comments', 0),
 (22, 3, 1, 6, '2016-12-07 12:20:00', 1, 'USA', 'Nice', 0),
-(23, 1, 1, 9, '2016-12-19 09:35:00', 1, '', 'Daddy''s added', 0);
+(23, 1, 1, 9, '2016-12-19 09:35:00', 1, '', 'Daddy''s added', 0),
+(24, 1, 2, 7, '2016-12-23 00:49:00', 3, '', '', 0),
+(25, 2, 2, 7, '2016-12-23 00:53:00', 3, '', '', 0),
+(26, 2, 6, 9, '2016-12-14 11:16:00', 2, '', '', 0),
+(27, 1, 1, 84, '2016-12-23 23:44:00', 1, '', 'test', 0);
 
 -- --------------------------------------------------------
 

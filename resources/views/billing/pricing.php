@@ -22,17 +22,17 @@ echo View::make("billing.sidebar",array('active_link'=>'Pricing'))->render();
 
   //debug($results);
   ?>
-  <h1>Pricing for Districts  <a  href='<?php echo url("billing-admin/invoice/add"); ?>' class="btn btn-primary" style="float:right">Add Invoice</a> 
-  <a  href='javascript:void(0)' class="btn btn-primary" style="float:right;margin-right:10px;" data-toggle='modal' data-target='#uploadEntity'>Upload CSV File</a>
-  <a  href='<?php echo str_replace("/public/","/",url('uploads/mass-upload/driver_upload.csv')); ?>' download class="btn btn-primary" style="float:right;margin-right:10px;" >Sample CSV File</a>
-  </h1>
+  <h1>Pricing for Districts
+  <a  href='javascript:void(0)' class="btn btn-primary" style="float:right;margin-right:10px;" data-toggle='modal' data-target='#uploadEntity'>Add District</a>
+    </h1>
   <table class='table table-striped'>
-  <tr><th>District Id</th><th>District Name</th><th>State</th><th>Action</th></tr>
+  <tr><th>District Id</th><th style="width:60%">District Name</th><th>State</th><th>Action</th></tr>
   <?php
   $root=Request::root();
   foreach($results as $key):
-    $set_pricing="<a href='/pricing/edit/{$key->district_id}'  class='btn btn-info'><i class='glyphicon glyphicon-euro'></i> SET PRICING</a>";
-    echo "<tr><td>{$key->district_id}</td><td>{$key->district_name}</td><td>{$key->state}</td><td>$set_pricing</td></tr>";
+    $set_pricing="<a href='$root/billing-admin/pricing/edit/{$key->district_id}'  class='btn btn-info'><i class='glyphicon glyphicon-euro'></i></a>";
+    $delete="<a data-toggle='modal' data-target='#deleteEntity'  href='javascript:void()' data-link='$root/billing-admin/delete/pricing/districts/district_id/{$key->district_id}' class='btn btn-danger delete_atrib'><i class='glyphicon glyphicon-trash'></i></a>";
+    echo "<tr><td>{$key->district_id}</td><td>{$key->district_name}</td><td>{$key->state}</td><td>$set_pricing $delete</td></tr>";
   endforeach;
   ?>
 </table>
@@ -71,17 +71,21 @@ echo View::make("billing.sidebar",array('active_link'=>'Pricing'))->render();
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Upload  Drivers</h4>
+        <h4 class="modal-title">Add New District</h4>
       </div>
       <div class="modal-body">
-        <form method="post" action='driver-mass-upload' enctype="multipart/form-data">
-        <p>Add Driver using CSV files.</p>
-        <input type='file' name='drivers_csv' id='drivers_csv' required="required" class='form-control'>
+        <form method="post" action='add-district' enctype="multipart/form-data">
+          <label>District Name</label>
+        <input type='text' name='district_name'  required="required" class='form-control'>
+
+          <label>State</label>
+          <input type='text' name='state'  required="required" class='form-control'>
+
       </div>
       <div class="modal-footer">
         <input type='hidden' name='_token' value="<?php echo csrf_token(); ?>">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-info">Upload</button>
+        <button type="submit" class="btn btn-info">Save</button>
       </form>
       </div>
     </div><!-- /.modal-content -->
