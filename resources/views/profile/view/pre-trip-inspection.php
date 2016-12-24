@@ -31,7 +31,8 @@ echo View::make('profile.header',array('title'=>$title));
                 $inspection_step=inspectionStepName($key);
             echo "<tr><td style='width:80%'>$inspection_step</td><td>$value</td>";    
             endforeach;    
-            $odometer_reading=odometerReading($result->odometer_reading);  
+            //$odometer_reading=odometerReading($result->odometer_reading);  
+            $odometer_reading=$result->odometer_reading;
             echo "<tr><td style='width:80%'>Comments</td><td>{$result->comments}</td>";    
             echo "<tr><td style='width:80%'>Odometer Reading</td><td>$odometer_reading</td>";
             ?>

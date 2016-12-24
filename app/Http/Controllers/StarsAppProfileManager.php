@@ -20,6 +20,7 @@ class StarsAppProfileManager extends Controller
 {
 function __construct(Request $request){
 
+
     $session_deactivated=AdminManagerModel::security();
     if($session_deactivated){
         //redirector('/');
@@ -475,6 +476,12 @@ public function addVehicleProblem(){
     return Redirect::to("system-admin/maintenance-history");
 }
 
+//Add Offense
+
+public function addOffense(){
+    AdminManagerModel::addOffenseModel(Input::all());
+    return Redirect::to("system-admin/discipline-referrals");
+}
 
 //Route Types
 

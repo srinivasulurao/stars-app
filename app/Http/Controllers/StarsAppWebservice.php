@@ -156,6 +156,10 @@ class StarsAppWebservice extends Controller
            $result=WebserviceModel::getEntityByIdModel('districts','district_id',$entity_id);
     	}
 
+      if($entity=="discipline_offense" || $entity=="discipline_offense"){
+           $result=WebserviceModel::getEntityByIdModel('discipline_offense','discipline_offense_id',$entity_id);
+      }
+
     	if($entity=="route_maps" || $entity=="route_map"){
            $result=WebserviceModel::getEntityByIdModel('routes_maps','route_id',$entity_id);
            if($result):
@@ -168,18 +172,24 @@ class StarsAppWebservice extends Controller
         if($entity=="trip_history" || $entity=="trip_historys"){
            $result=WebserviceModel::getEntityByIdModel('trip_history','trip_id',$entity_id);
            if($result):
-	           $result->route_name=routeName($result->route_id);
-	           $result->vehicle=vehicleName($result->vehicle_id);
-	           $result->pre_inspection=WebserviceModel::getEntityByIdModel('trip_inspections','inspection_id',$result->pre_inspection_id);
-	           $result->post_inspection=WebserviceModel::getEntityByIdModel('trip_inspections','inspection_id',$result->post_inspection_id);
-	           $pre_inspection_data=unserialize(base64_decode($result->pre_inspection->inspection_data));
-	           $post_inspection_data=unserialize(base64_decode($result->post_inspection->inspection_data));
+            try{
+    	           $result->route_name=routeName($result->route_id);
+    	           $result->vehicle=vehicleName($result->vehicle_id);
+    	           $result->pre_inspection=WebserviceModel::getEntityByIdModel('trip_inspections','inspection_id',$result->pre_inspection_id);
+    	           $result->post_inspection=WebserviceModel::getEntityByIdModel('trip_inspections','inspection_id',$result->post_inspection_id);
+    	           $pre_inspection_data=unserialize(base64_decode($result->pre_inspection->inspection_data));
+    	           $post_inspection_data=unserialize(base64_decode($result->post_inspection->inspection_data));
 
-	           $pre_inspection_step=array_map("inspectionStepName",array_keys($pre_inspection_data));
-	           $post_inspection_step=array_map("inspectionStepName",array_keys($post_inspection_data));
+    	           $pre_inspection_step=array_map("inspectionStepName",array_keys($pre_inspection_data));
+    	           $post_inspection_step=array_map("inspectionStepName",array_keys($post_inspection_data));
 
-	           $result->pre_inspection->inspection_data=array_filter(array_combine($pre_inspection_step,$pre_inspection_data));
-	           $result->post_inspection->inspection_data=array_filter(array_combine($post_inspection_step,$post_inspection_data));
+    	           $result->pre_inspection->inspection_data=array_filter(array_combine($pre_inspection_step,$pre_inspection_data));
+    	           $result->post_inspection->inspection_data=array_filter(array_combine($post_inspection_step,$post_inspection_data));
+             }
+             catch(\Exception $e){
+                 $result->pre_inspection="";
+                 $result->post_inspection="";
+             }
            endif;
     	}
 
@@ -297,6 +307,10 @@ class StarsAppWebservice extends Controller
     	if($entity=="districts"){
            $results=WebserviceModel::getAllEntityModel('districts');
     	}
+      
+      if($entity=="discipline_offense"){
+           $results=WebserviceModel::getAllEntityModel('discipline_offense');
+      }
 
       if($entity=="odometer"){
            $results=WebserviceModel::getAllEntityModel('odometer_range');
@@ -407,12 +421,11 @@ class StarsAppWebservice extends Controller
 
     	if($entity=="threshold_problems"){
     		$results=WebserviceModel::getAllEntityModel('school_vehicle_threshold');
-    		if($results):
-    		foreach($results as $result):
-	            $result->school=schoolName($result->school_id);
-            endforeach;
-            endif;
     	}
+
+      if($entity=="vehicle_problems" || $entity=="vehicle_problem"){
+        $results=WebserviceModel::getAllEntityModel('vehicle_problem');
+      }
 
     	if($entity=="students"){
     		$results=WebserviceModel::getAllEntityModel('students');
@@ -435,11 +448,6 @@ class StarsAppWebservice extends Controller
     public function loginDriver($username,$password){
       $result=WebserviceModel::loginDriver($username,$password);
     	if($result){
-    		$result->profile_pic=url($result->profile_pic);
-            $result->district=districtName($result->district_id);
-            $result->school=schoolName($result->school_id);
-            unset($result->password);
-
     		echo WebserviceModel::jc(200,$result,"Authentication Successfull");
     	}
     	else{
@@ -771,5 +779,16 @@ public function addSpecialTripHistory(){
       }
 }
 
+public function getLatestOdometerReading($vehicle_id){
+
+      $result=WebserviceModel::getLatestOdometerReadingModel($vehicle_id);
+         
+      if($result){
+        echo WebserviceModel::jc(200,$result,"Odometer Reading Fetched Successfully !");
+      }
+      else{
+        echo WebserviceModel::jc(206 ,$result,WebserviceModel::$exception_error);
+      }
+}
 
 }//end of Controller class.

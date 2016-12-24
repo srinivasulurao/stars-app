@@ -5,7 +5,7 @@ echo View::make('profile.header',array('title'=>$title));
 <div class='container profile-container'>
     <div class='col-md-2 sidebar'>
         <?php
-        echo View::make("profile.sidebar",array('active_link'=>'Schools'))->render();
+        echo View::make("profile.sidebar",array('active_link'=>'Campuses'))->render();
         ?>
     </div>
     <!-- Entire content to be shown here -->
@@ -23,15 +23,15 @@ echo View::make('profile.header',array('title'=>$title));
         ?>
         <h1>Add Campus Details</h1>
         <form method="post" action="<?php echo site_url("/system-admin/add-school-details"); ?>"  style="width:50%" enctype="multipart/form-data">
-            <?php echo Form::label('School Name', 'School Name'); ?>
+            <?php echo Form::label('Campus Name', 'Campus Name'); ?>
             <?php echo Form::text('school_name', '',array('class'=>"form-control","required"=>"required")); ?>
-            <?php echo Form::label('School Address', 'School Address'); ?>
+            <?php echo Form::label('Campus Address', 'Campus Address'); ?>
             <?php echo Form::text('school_address','',array('class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('District', 'District'); ?>
             <?php echo Form::select('district_id',getDistrictsDropDown(),'',array('class'=>"form-control","required"=>"required")); ?>
-            <?php echo Form::label('School Description', 'School Description'); ?>
+            <?php echo Form::label('Campus Description', 'Campus Description'); ?>
             <?php echo Form::textarea('school_description','',array('class'=>"form-control","required"=>"required","rows"=>5)); ?>
-            <?php echo Form::label('School Picture', 'School Picture'); ?>
+            <?php echo Form::label('Campus Picture', 'Campus Picture'); ?>
             <?php echo Form::file('school_pic',array('required'=>'required')); ?>
 
             <?php echo Form::token(); ?><br>

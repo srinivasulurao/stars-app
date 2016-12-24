@@ -25,7 +25,7 @@ echo View::make('profile.header',array('title'=>$title));
         <form method="post" action="<?php echo site_url("/system-admin/update-route-map-details"); ?>"  style="width:50%" enctype="multipart/form-data">
             <?php echo Form::label('Route Name', 'Route Name'); ?>
             <?php echo Form::text('route_name', $result->route_name,array('class'=>"form-control","required"=>"required")); ?>
-            <?php echo Form::label('School', 'School'); ?>
+            <?php echo Form::label('Campus', 'Campus'); ?>
             <?php echo Form::select('school_id',getSchoolsDropDown(),$result->school_id,array('class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('District', 'District'); ?>
             <?php echo Form::select('district_id',getDistrictsDropDown(), $result->district_id,array('class'=>"form-control","required"=>"required")); ?>

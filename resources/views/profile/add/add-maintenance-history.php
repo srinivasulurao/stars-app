@@ -23,7 +23,7 @@ echo View::make('profile.header',array('title'=>$title));
         ?>
         <h1>Add Maintenance History</h1>
         <form method="post" action="<?php echo site_url("/system-admin/add-maintenance-history-details"); ?>"  style="width:50%" enctype="multipart/form-data">
-            <?php echo Form::label('School', 'School'); ?>
+            <?php echo Form::label('Campus', 'Campus'); ?>
             <?php echo Form::select('school_id',getSchoolsDropDown(),'',array('class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('Vehicle', 'Vehicle'); ?>
             <?php echo Form::select('vehicle_id',getVehiclesDropDown(),'',array('class'=>"form-control","required"=>"required")); ?>

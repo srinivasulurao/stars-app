@@ -38,7 +38,7 @@ echo View::make("profile.sidebar",array('active_link'=>'Trip History'))->render(
      $delete="<a data-toggle='modal' data-target='#deleteEntity'  href='javascript:void()' data-link='$root/system-admin/delete/trip-history/trip_history/trip_id/{$key->trip_id}' class='btn btn-danger delete_atrib'><i class='glyphicon glyphicon-trash'></i></a>";
     $view_pre="<a href='$root/system-admin/view-pre-trip-inspection/{$key->pre_inspection_id}' class='label label-primary' target='_blank'>{$key->pre_trip}</a>";
     $view_post="<a href='$root/system-admin/view-post-trip-inspection/{$key->post_inspection_id}' class='label label-primary' target='_blank'>{$key->post_trip}</a>";
-  echo "<tr><td>{$key->trip_id}</td><td><code>{$route}</code></td><td>$driver</td><td>$route_type</td><td>{$trip_time}</td><td>$view_pre</td><td>$view_post</td><td>{$key->trip_status}</td><td>$edit  $delete</td></tr>";
+  echo "<tr><td>{$key->trip_id}</td><td><code>{$route}</code></td><td>$driver</td><td>{$route_type}</td><td>{$trip_time}</td><td>$view_pre</td><td>$view_post</td><td>{$key->trip_status}</td><td>$edit  $delete</td></tr>";
   endforeach;
   ?>
 </table>

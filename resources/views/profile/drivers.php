@@ -27,7 +27,7 @@ echo View::make("profile.sidebar",array('active_link'=>'Drivers'))->render();
   <a  href='<?php echo str_replace("/public/","/",url('uploads/mass-upload/driver_upload.csv')); ?>' download class="btn btn-primary" style="float:right;margin-right:10px;" >Sample CSV File</a>
   </h1>
   <table class='table table-striped'>
-  <tr><th style='display:none'>Picture</th><th>First Name</th><th>Last Name</th><th>School</th><th>District</th><th> Description</th><th>Username</th><th style='display:none'>Email</th><th>Phone</th></th><th>Action</th></tr>
+  <tr><th style='display:none'>Picture</th><th>First Name</th><th>Last Name</th><th>Campus</th><th>District</th><th> Description</th><th>Username</th><th style='display:none'>Email</th><th>Phone</th></th><th>Action</th></tr>
   <?php
   $root=Request::root();
   foreach($results as $key):

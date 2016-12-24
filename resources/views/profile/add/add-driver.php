@@ -52,7 +52,7 @@ echo View::make('profile.header',array('title'=>$title));
 
             <?php echo Form::label('District', 'District'); ?>
             <?php echo Form::select('district_id',getDistrictsDropDown(),'',array('class'=>"form-control","required"=>"required")); ?>
-            <?php echo Form::label('School', 'School'); ?>
+            <?php echo Form::label('Campus', 'Campus'); ?>
             <?php echo Form::select('school_id',getSchoolsDropDown(),'',array('class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('Phone', 'Phone'); ?>
             <?php echo Form::text('phone','',array('class'=>"form-control")); ?>

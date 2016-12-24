@@ -24,7 +24,7 @@ echo View::make("profile.sidebar",array('active_link'=>'Forms'))->render();
   ?>
   <h1>Forms  <a  href='<?php echo url("system-admin/form/add"); ?>' class="btn btn-primary" style="float:right">Add New</a></h1>
   <table class='table table-striped'>
-  <tr><th>ID</th><th>Form Name</th><th width='40%'>Form Description</th><th>School</th><th>Form Attachment</th><th>Action</th></tr>
+  <tr><th>ID</th><th>Form Name</th><th width='40%'>Form Description</th><th>Campus</th><th>Form Attachment</th><th>Action</th></tr>
   <?php
   $root=Request::root();
   foreach($results as $key):

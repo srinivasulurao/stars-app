@@ -1,11 +1,12 @@
 <?php
-echo View::make('profile.header',array('title'=>$title));
+echo View::make('billing.header',array('title'=>$title));
 ?>
 
 <div class='container profile-container'>
+
 <div class='col-md-2 sidebar'>
 <?php
-echo View::make("profile.sidebar",array('active_link'=>'Discipline Referrals'))->render();
+echo View::make("billing.sidebar",array('active_link'=>'Invoices'))->render();
 ?>
 </div>
 <!-- Entire content to be shown here -->
@@ -21,21 +22,23 @@ echo View::make("profile.sidebar",array('active_link'=>'Discipline Referrals'))-
 
   //debug($accountDetail);
   ?>
-  <h1>Discipline Referrals  <a  href='<?php echo url('system-admin/discipline-referral/add'); ?>' class="btn btn-primary" style="float:right">Add New</a><a class="btn btn-primary" data-toggle='modal' data-target='#addEntity' href="javascript:void(0)" style="float:right;margin-right:10px;">Add Offense Types</a></h1>
-
+  <h1>Invoices  <a  href='<?php echo url("billing-admin/invoice/add"); ?>' class="btn btn-primary" style="float:right">Add Invoice</a> 
+  <a  href='javascript:void(0)' class="btn btn-primary" style="float:right;margin-right:10px;" data-toggle='modal' data-target='#uploadEntity'>Upload CSV File</a>
+  <a  href='<?php echo str_replace("/public/","/",url('uploads/mass-upload/driver_upload.csv')); ?>' download class="btn btn-primary" style="float:right;margin-right:10px;" >Sample CSV File</a>
+  </h1>
   <table class='table table-striped'>
-  <tr><th>ID</th><th>Student Name</th><th>Driver</th><th>Campus</th><th>Vehicle</th><th>Offence</th><th>Offence Time</th><th>Offence Location</th><th width="25%">Comments</th><th width="12%">Action</th></tr>
-
+  <tr><th style='display:none'>Picture</th><th>First Name</th><th>Last Name</th><th>Campus</th><th>District</th><th> Description</th><th>Username</th><th style='display:none'>Email</th><th>Phone</th></th><th>Action</th></tr>
   <?php
   $root=Request::root();
   foreach($results as $key):
-    $edit="<a href='$root/system-admin/discipline-referral/edit/{$key->complaint_id}' class='btn btn-info'><i class='glyphicon glyphicon-edit'></i></a>";
-    $delete="<a data-toggle='modal' data-target='#deleteEntity'  href='javascript:void()' data-link='$root/system-admin/delete/discipline-referrals/discipline_referrals/complaint_id/{$key->complaint_id}' class='btn btn-danger delete_atrib'><i class='glyphicon glyphicon-trash'></i></a>";
-    $offence_time=date("Y-m-d H:i A",strtotime($key->offence_time));
-    $driver=driverName($key->driver_id);
+    $pic_url=str_replace("/public","",Request::root().$key->profile_pic);
+    $pic="<img src='$pic_url' class='thumbnail' style='height:70px;width:70px;border-radius:50%'>";
     $school=schoolName($key->school_id);
-    $vehicle=vehicleName($key->vehicle_id);
-  echo "<tr><td>{$key->complaint_id}.</td><td>{$key->student_name}</td><td>{$driver}</td><td>$vehicle</td><td>{$school}</td><td>{$key->offence}</td><td>$offence_time</td><td>{$key->offence_location}</td><td>{$key->comments}</td><td>$edit  $delete</td></tr>";
+    $district=districtName($key->district_id);
+    $edit="<a href='$root/system-admin/driver/edit/{$key->driver_id}' class='btn btn-info'><i class='glyphicon glyphicon-edit'></i></a>";
+    $delete="<a data-toggle='modal' data-target='#deleteEntity'  href='javascript:void()' data-link='$root/system-admin/delete/drivers/drivers/driver_id/{$key->driver_id}' class='btn btn-danger delete_atrib'><i class='glyphicon glyphicon-trash'></i></a>";
+    $driver_description=($key->driver_description)?driverDescription($key->driver_description):"";
+  echo "<tr><td style='display:none'>$pic</td><td>{$key->first_name}</td><td> {$key->last_name}</td><td>{$school}</td><td>{$district}</td><td>$driver_description</td><td>{$key->username}</td><td style='display:none'>{$key->email}</td><td>{$key->phone}</td><td>$edit  $delete</td></tr>";
   endforeach;
   ?>
 </table>
@@ -44,6 +47,7 @@ echo View::make("profile.sidebar",array('active_link'=>'Discipline Referrals'))-
 
 
 </div> <!-- Container ends -->
+
 
 <div class="modal fade" id="deleteEntity" role="dialog">
   <div class="modal-dialog">
@@ -68,28 +72,30 @@ echo View::make("profile.sidebar",array('active_link'=>'Discipline Referrals'))-
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-<?php
-echo view('profile.footer');
-?>
-
-<div class="modal fade" id="addEntity" role="dialog">
+<div class="modal fade" id="uploadEntity" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Add Offense Type</h4>
+        <h4 class="modal-title">Upload  Drivers</h4>
       </div>
       <div class="modal-body">
-        <form method="post" action='<?php echo url('system-admin/add-offense'); ?>' enctype="multipart/form-data">
-            <?php echo Form::label('Offense', 'Offense'); ?>
-            <?php echo Form::text('description', '',array('class'=>"form-control","required"=>"required")); ?>
-            </div>
+        <form method="post" action='driver-mass-upload' enctype="multipart/form-data">
+        <p>Add Driver using CSV files.</p>
+        <input type='file' name='drivers_csv' id='drivers_csv' required="required" class='form-control'>
+      </div>
       <div class="modal-footer">
         <input type='hidden' name='_token' value="<?php echo csrf_token(); ?>">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-info">Submit</button>
+        <button type="submit" class="btn btn-info">Upload</button>
       </form>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+
+<?php
+echo view('billing.footer');
+?>
+

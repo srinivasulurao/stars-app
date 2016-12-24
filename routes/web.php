@@ -25,6 +25,10 @@ Route::post('doLogin',array("uses"=>"StarsAppAuthentication@doLogin"));
 Route::post('check-forgot-credentials',array("uses"=>"StarsAppAuthentication@checkForgotCredentials"));
 Route::post('reset-admin-pass',array("uses"=>"StarsAppAuthentication@resetAdminPasswordDetails"));
 
+####################################################################################
+#################SYSTEM ADMIN PAGES ################################################
+####################################################################################
+
 //Dashboard pages.
 Route::get('/system-admin/dashboard',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@dashboard"));
 
@@ -125,6 +129,9 @@ Route::post('/system-admin/updateThresholdProblem',array("middleware","Role:Star
 //Vehicle Problem
 Route::post('/system-admin/addVehicleProblem',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@addVehicleProblem"));
 
+//Offense
+Route::post('/system-admin/add-offense',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@addOffense"));
+
 //Route Types
 Route::get('/system-admin/route-types',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@routeTypes"));
 Route::post('/system-admin/addRouteType',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@addRouteType"));
@@ -135,7 +142,17 @@ Route::get('/uploads/{pdf_folder}/{pdf_file}',array("middleware","Role:StarsApp"
 //Delete Entry from Table & Do proper Redirection
 Route::get('/system-admin/delete/{page}/{table}/{primary_index}/{id}',array("middleware","Role:StarsApp","uses"=>"StarsAppProfileManager@deleteSingleEntity"));
 
-//Webservice for Mobile App.
+#############################################################################################
+//##############################Billing Stuff Added Here  ###################################
+#############################################################################################
+
+//Billing 
+Route::get('billing-admin/dashboard',array("middleware","Role:StarsApp","uses"=>"StarsAppBillingManager@invoices"));
+Route::get('billing-admin/pricing',array("middleware","Role:StarsApp","uses"=>"StarsAppBillingManager@pricing"));
+
+#############################################################################################
+//##############################Webservice for Mobile App.###################################
+#############################################################################################
 Route::get('/web-api/getEntityById/{entity}/{entity_id}',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@getEntityById"));
 Route::get('/web-api/login-driver/{username}/{password}',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@loginDriver"));
 Route::post('/web-api/create-driver',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@createDriver"));
@@ -170,3 +187,5 @@ Route::post('/web-api/reset-password/',array("middleware","Role:StarsApp","uses"
 Route::get('/web-api/seating-chart/{route_id}',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@getSeatingChart"));
 
 Route::post('/web-api/add-special-trip-history',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@addSpecialTripHistory"));  
+
+Route::get('/web-api/latest-odometer-reading/{vehicle_id}',array("middleware","Role:StarsApp","uses"=>"StarsAppWebservice@getLatestOdometerReading"));

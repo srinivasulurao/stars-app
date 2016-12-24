@@ -29,6 +29,7 @@ class StarsAppAuthentication extends Controller
       $email=$request->input('admin_email');
       $password=$request->input('admin_password');
       $valid_user=AuthenticationModel::AuthenticateAdmin($email,$password);
+      
       if($valid_user){
       
         //Setting cookie for 1 week.
@@ -43,7 +44,12 @@ class StarsAppAuthentication extends Controller
           setcookie("admin_password",$request->input('admin_password'),time()-(24*3600*7));
           setcookie("remember_me",$request->input('remember_me'),time()-(24*3600*7));
         }
-          return Redirect::to('system-admin/dashboard');
+        $session=Session::all();
+        $admin_data=(array)$session[0];
+          if($admin_data['redirection']=="dashboard")
+              return Redirect::to('system-admin/dashboard');
+          else
+              return Redirect::to('billing-admin/dashboard');
       }
       else
       return Redirect::to('login');

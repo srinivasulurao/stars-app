@@ -64,7 +64,7 @@ public static function security(){
     }
 
     public static function getAllTripHistory(){
-        $results=DB::table('trip_history')->join('routes_maps','trip_history.route_id','=','routes_maps.route_id')->get();
+        $results=DB::table('trip_history')->get();
         return $results;
     }
 
@@ -878,6 +878,7 @@ public static function security(){
    public static function updateTripHistoryDetails(){
         $details=array();
         $details['route_id']=Input::input('route_id');
+        $details['route_type']=Input::input('route_type');
         $details['pre_trip']=Input::input('pre_trip');
         $details['post_trip']=Input::input('post_trip');
 
@@ -905,6 +906,7 @@ public static function security(){
    public static function addTripHistoryDetails(){
        $details=array();
         $details['route_id']=Input::input('route_id');
+        $details['route_type']=Input::input('route_type');
         $details['pre_trip']=Input::input('pre_trip');
         $details['post_trip']=Input::input('post_trip');
 
@@ -1057,6 +1059,27 @@ public static function security(){
             Session::put('system_message_type','danger');
         }
    }
+
+//Offense 
+
+public static function addOffenseModel($post){
+     
+      $details=array();
+      $details['description']=$post['description'];
+      
+      
+     try {
+            DB::table('discipline_offense')->insert($details);
+            Session::put('system_message','Offense Type Added Successfully !');
+            Session::put('system_message_type','success');
+        } catch (\Illuminate\Database\QueryException $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        } catch (\Exception $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        }
+}   
 
 //Route Types
    public static function addRouteTypeModel($post){

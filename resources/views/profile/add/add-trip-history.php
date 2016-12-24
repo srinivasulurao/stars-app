@@ -39,7 +39,9 @@ echo View::make('profile.header',array('title'=>$title));
             <?php echo Form::text('trip_time','', array('id'=>'trip_time','class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('Trip Status', 'Trip Status'); ?>
             <?php echo Form::select('trip_status',getTripStatusDropDown(),'', array('class'=>"form-control","required"=>"required")); ?>
-            
+            <?php echo Form::label('Route Type', 'Route Type'); ?>
+            <?php echo Form::select('route_type',getRouteTypeDropDown(),'',array('class'=>"form-control","required"=>"required")); ?>
+
             
             <?php echo Form::hidden('pre_inspection_id',$pre_inspection_id); ?>
             <?php echo Form::token(); ?><br>

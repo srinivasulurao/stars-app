@@ -9,7 +9,7 @@ function debug($arrayObject){
 function getSchoolsDropDown(){
     $results=DB::table("schools")->get();
     $schools=array();
-    $schools['']="--SELECT SCHOOL--";
+    $schools['']="--SELECT CAMPUS--";
     foreach($results as $result)
     $schools[$result->school_id]=$result->school_name;
 
@@ -161,6 +161,16 @@ function vehicleProblemDropDown(){
     $results=DB::table("vehicle_problem")->get();
     foreach($results as $result):
         $list[$result->vehicle_problem_id]=$result->description;
+    endforeach;
+    return $list;
+}
+
+function getOffenseDropDown(){
+    $list=array();
+    $list['']="--SELECT OFFENSE--";
+    $results=DB::table("discipline_offense")->get();
+    foreach($results as $result):
+        $list[$result->discipline_offense_id]=$result->description;
     endforeach;
     return $list;
 }

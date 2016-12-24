@@ -27,7 +27,7 @@ echo View::make('profile.header',array('title'=>$title));
             <?php echo Form::text('form_name', '',array('class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('Form Description', 'Form Description'); ?>
             <?php echo Form::textarea('form_description', '',array('class'=>"form-control","required"=>"required")); ?>
-            <?php echo Form::label('School', 'School'); ?>
+            <?php echo Form::label('Campus', 'Campus'); ?>
             <?php echo Form::select('school_id',getSchoolsDropDown(),'',array('class'=>"form-control","required"=>"required")); ?>
             <?php echo Form::label('Form Attachment', 'Form Attachment'); ?>
             <?php echo Form::file('form_attachment',array('required'=>'required')); ?>

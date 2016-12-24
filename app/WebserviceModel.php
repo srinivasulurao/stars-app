@@ -55,6 +55,12 @@ class WebserviceModel extends Model
     public static function getTripHistoryByDriverModel($driver_id)
     {
         $result = DB::table('trip_history')->join('routes_maps','trip_history.route_id','=','routes_maps.route_id')->join('route_types','routes_maps.route_type','=','route_types.id')->where('trip_history.driver_id', $driver_id)->get();
+        if(!sizeof($result)):
+          //This means because of the empty route id we are not getting the results.
+          $result = DB::table('trip_history')->where('trip_history.driver_id',$driver_id)->get();
+        endif;
+
+        //debug($result);
         return $result;
     }
 
@@ -76,8 +82,16 @@ class WebserviceModel extends Model
         $encrypted_password=md5($password);
         $result=DB::table('drivers')->where('username',$username)->where('password',$encrypted_password)->first();
         $count=DB::table('drivers')->where('username',$username)->where('password',$encrypted_password)->count();
-        if($count)
+        if($count){
+          // remove unecessary index.
+            $result=(array)$result;
+            $remove_index=$remove_index=array('email','about_driver','city','address','total_exp');
+            foreach($remove_index as $key):
+              unset($result[$key]);
+            endforeach;  
+            $result=(object)$result;
         return $result;
+        }
         else
         return "";
     }
@@ -134,12 +148,18 @@ class WebserviceModel extends Model
         //    $details['total_exp']=Input::get('total_exp');
         //if(Input::get('about_driver'))
         //   $details['about_driver']=Input::get('about_driver');
-       // if(Input::get('city'))
-         //   $details['city']=Input::get('city');
+        //if(Input::get('city'))
+        //   $details['city']=Input::get('city');
+        //if(Input::get('address'))
+        //     $details['address']=Input::get('address');
         if(Input::get('state'))
             $details['state']=Input::get('state');
-        // if(Input::get('address'))
-        //     $details['address']=Input::get('address');
+        if(Input::get('driver_description'))
+          $details['driver_description']=Input::get('driver_description');
+        if(Input::get('security_question'))
+          $details['security_question']=Input::get('security_question');
+        if(Input::get('security_answer'))
+          $details['security_answer']=Input::get('security_answer');
         if(Input::get('district_id'))
             $details['district_id']=Input::get('district_id');
         if(Input::get('school_id'))
@@ -153,7 +173,18 @@ class WebserviceModel extends Model
 
         try {
             $last_insert_id=DB::table('drivers')->insertGetId($details);
-            return $_this->getEntityByIdModel('drivers','driver_id',$last_insert_id);
+            $result=$_this->getEntityByIdModel('drivers','driver_id',$last_insert_id);
+
+            // remove unecessary index.
+            $result=(array)$result;
+            $remove_index=array('email','about_driver','city','address','total_exp');
+            foreach($remove_index as $key):
+              unset($result[$key]);
+            endforeach;  
+            $result=(object)$result;
+
+            //debug($result);
+            return $result;
         } catch (\Illuminate\Database\QueryException $e) {
             return 0;
         } catch (\Exception $e) {
@@ -191,6 +222,13 @@ class WebserviceModel extends Model
             $details['school_id']=Input::get('school_id');
         if(Input::get('phone'))
             $details['phone']=Input::get('phone');
+        if(Input::get('driver_description'))
+          $details['driver_description']=Input::get('driver_description');
+        if(Input::get('security_question'))
+          $details['security_question']=Input::get('security_question');
+        if(Input::get('security_answer'))
+          $details['security_answer']=Input::get('security_answer');
+
         if(Input::get('profile_pic')):
             $profile_pic=$_this->HexaDecimalToImage(Input::get('profile_pic'));
             $details['profile_pic']=str_replace("./","/",$profile_pic);
@@ -200,7 +238,19 @@ class WebserviceModel extends Model
 
         try {
             DB::table('drivers')->where('driver_id',$driver_id)->update($details);
-            return $_this->getEntityByIdModel('drivers','driver_id',$driver_id);
+            $result=$_this->getEntityByIdModel('drivers','driver_id',$driver_id);
+
+            // remove unecessary index.
+            $result=(array)$result;
+            $remove_index=array('email','about_driver','city','address','total_exp');
+            foreach($remove_index as $key):
+              unset($result[$key]);
+            endforeach;  
+            $result=(object)$result;
+
+            //debug($result);
+            return $result;
+
         } catch (\Illuminate\Database\QueryException $e) {
             return 0;
         } catch (\Exception $e) {
@@ -308,6 +358,7 @@ class WebserviceModel extends Model
     $details['reason']=Input::get('reason');
     $details['total_distance']=Input::get('total_distance');
     $details['driver_id']=Input::get('driver_id');
+    $details['route_type']=Input::get('route_type');
 
     try {
           $last_insert_id=DB::table('trip_history')->insertGetId($details);
@@ -471,21 +522,37 @@ public static function addMaintenanceIssueModel($post){
       unset($seating_chart_data[$i]['RIGHT']);
       $i++;
     endwhile;
-
+    
+    $correspondingArray=array("A1"=>"A","A2"=>"B","A3"=>"C","B1"=>"D","B2"=>"E","B3"=>"F");
     $seating_chart=array();
-    foreach($seating_chart_data as $key):
+    //debug($seating_chart_data);
+    $innerCounter=1;
+    foreach($seating_chart_data as $key):  
       foreach($key as $k=>$v):
+        $k=$innerCounter.$correspondingArray[$k];
         $seating_chart[$v]=$k;
       endforeach;
+      //debug($seating_chart);
+      $innerCounter++;
     endforeach;
       
-    // echo '<pre>';
-    // print_r($seating_chart_data);
-    // print_r($seating_chart);
-    // echo '</pre>';
     return $seating_chart;
   } 
 
+ public static function getLatestOdometerReadingModel($vehicle_id){
+  //$result = DB::table('trip_history')->join('trip_inspections','trip_history.pre_inspection_id','=','trip_inspections.inspection_id')->orOn('trip_inspections','trip_history.post_inspection_id','=','trip_inspections.inspection_id')->where('trip_history.vehicle_id', $vehicle_id)->get();
+  // $result=DB::table('trip_inspections')->join('trip_history',function($join){
+  //   global $vehicle_id;
+  //  $join->on('trip_inspections.inspection_id','=','trip_history.post_inspection_id')->orOn('trip_inspections.inspection_id','=','trip_history.pre_inspection_id')->where('trip_history.vehicle_id','=',$vehicle_id);
+  // })->orderBy('trip_inspections.inspection_id', 'desc')->first();
+
+  $result=DB::select("SELECT * FROM trip_inspections INNER JOIN trip_history ON (trip_inspections.inspection_id=trip_history.post_inspection_id OR trip_inspections.inspection_id=trip_history.pre_inspection_id) WHERE trip_history.vehicle_id='$vehicle_id' ORDER BY trip_inspections.inspection_id DESC LIMIT 1");
+  
+  $new_result=array('recent_odometer_reading'=>$result[0]->odometer_reading);
+  $new_result=(object)$new_result;
+  //debug($new_result);
+  return $new_result;
+ }
 
     
 }//WebserviceModel Ends Here.

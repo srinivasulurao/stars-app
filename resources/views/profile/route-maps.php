@@ -25,7 +25,7 @@ $sample_csv_file=str_replace("/public","",Request::root()."/uploads/sample/Sampl
   <h1><i class="glyphicon glyphicon-map-marker"></i> Route Info <a  href="<?php echo url("system-admin/route-map/add"); ?>" style="float:right" class="btn btn-primary">Add New</a> <a download="Sample-Seating-Arrangement.csv" href='<?php echo $sample_csv_file; ?>' class="btn btn-primary" style="float:right;margin-right:10px">Download Sample CSV File</a></h1>
 
   <table class='table table-striped'>
-  <tr><th>Route ID</th><th>Route Name</th><th>District</th><th>School</th><th style='display: none'>Start Point Coordinate</th><th style='display:none'>End Point Coordinates</th><th>Action</th></tr>
+  <tr><th>Route ID</th><th>Route Name</th><th>District</th><th>Campus</th><th style='display: none'>Start Point Coordinate</th><th style='display:none'>End Point Coordinates</th><th>Action</th></tr>
   <?php
   $root=Request::root();
   foreach($results as $key):

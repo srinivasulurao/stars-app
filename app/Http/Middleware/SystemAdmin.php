@@ -23,6 +23,7 @@ class SystemAdmin
       
 
        $session=Session::all();
+       
            if(isset($session[0])){
               $admin_credentials=$session[0];
               Session::put('admin_id',$admin_credentials->admin_id);
