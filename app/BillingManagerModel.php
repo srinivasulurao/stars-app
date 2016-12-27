@@ -21,6 +21,11 @@ class BillingManagerModel extends Model
         return $results;
     }
 
+    public static function getAllInvoices(){
+        $results=DB::table('invoice')->get();
+        return $results;
+    }
+
     public static function createPricingEntries($district_id){
        $results=DB::table('schools')->where('district_id',$district_id)->get();
         //debug($results);
@@ -32,8 +37,50 @@ class BillingManagerModel extends Model
                 $empty_pricing_entry['school_id']=$key->school_id;
                 $empty_pricing_entry['district_id']=$key->district_id;
                 DB::table('pricing')->insert($empty_pricing_entry);
+
             }
         endforeach;
+
+        //Check District Exists or not, if not then create empty invoice entry for district.
+        $district_exist=DB::table('invoice_address')->where('district_id',$key->district_id)->count();
+
+        if(!$district_exist):
+            $da=array();
+            $da['district_id']=$district_id;
+            DB::table('invoice_address')->insert($da);
+        endif;    
+    }
+
+    public static function generateInvoice(){
+        try {
+           $month=date("F");
+           $current_month=date("Y-m-d",time());
+
+           //Delete all the invoice with the current month.
+           DB::table('invoice')->where("invoice_date",$current_month)->delete();
+
+           // $districts=self::getAllDistricts();
+           //  foreach($districts as $district):
+           //  $details['district_id']=$district->district_id;    
+           //  $details['invoice_date']=$current_month;
+           //  $details['po_number']="XXXXXXX";
+           //  $details['email_address']=rand(1,10000000000)@xyz.com;
+           //  $details['payment_with']="payment_order";
+           //  $details['trea_member']="No"; // Default Member;
+           //  $details['']
+           //  DB:table('invoice')->insert($details);
+           //  endforeach;
+        
+
+            Session::put('system_message',"Invoice for current month <span class='label label-success'>$month</span> has been generated successfully !");
+            Session::put('system_message_type','success');
+        } catch (\Illuminate\Database\QueryException $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        } catch (\Exception $e) {
+            Session::put('system_message',$e->getMessage());
+            Session::put('system_message_type','danger');
+        }
     }
 
     public static function getDistrictPricingData($district_id){

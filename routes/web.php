@@ -20,8 +20,11 @@ Route::get('/',array("uses"=>"StarsAppAuthentication@Index"));
 Route::get('login',array("uses"=>"StarsAppAuthentication@Index"));
 Route::get('forgot-credentials',array("uses"=>"StarsAppAuthentication@forgotCredentials"));
 Route::get('reset-admin-password/{authentication_string}',array("uses"=>"StarsAppAuthentication@resetAdminPassword"));
+Route::get('activate-admin-account/{base_64_email}',array("uses"=>"StarsAppAuthentication@activateAdminAccount"));
+Route::get('registration',array("uses"=>"StarsAppAuthentication@registration"));
 
 Route::post('doLogin',array("uses"=>"StarsAppAuthentication@doLogin"));
+Route::post('doRegistration',array("uses"=>"StarsAppAuthentication@doRegistration"));
 Route::post('check-forgot-credentials',array("uses"=>"StarsAppAuthentication@checkForgotCredentials"));
 Route::post('reset-admin-pass',array("uses"=>"StarsAppAuthentication@resetAdminPasswordDetails"));
 
@@ -147,12 +150,13 @@ Route::get('/system-admin/delete/{page}/{table}/{primary_index}/{id}',array("mid
 #############################################################################################
 
 //Billing 
-Route::get('billing-admin/dashboard',array("middleware","Role:StarsApp","uses"=>"StarsAppBillingManager@invoices"));
+Route::get('billing-admin/invoices',array("middleware","Role:StarsApp","uses"=>"StarsAppBillingManager@invoices"));
 Route::get('billing-admin/pricing',array("middleware","Role:StarsApp","uses"=>"StarsAppBillingManager@pricing"));
 Route::get('billing-admin/pricing/edit/{district_id}',array("middleware","Role:StarsApp","uses"=>"StarsAppBillingManager@setPricing"));
 Route::post('billing-admin/save-pricing',array("middleware","Role:StarsApp","uses"=>"StarsAppBillingManager@savePricing"));
 Route::post('billing-admin/add-district',array("middleware","Role:StarsApp","uses"=>"StarsAppBillingManager@addDistrict"));
 Route::get('billing-admin/delete/{page}/{table}/{primary_id}/{entity_id}',array("middleware","Role:StarsApp","uses"=>"StarsAppBillingManager@deleteEntity"));
+Route::get('billing-admin/invoice/generate-invoice',array("middleware","Role:StarsApp","uses"=>"StarsAppBillingManager@generateInvoice"));
 
 #############################################################################################
 //##############################Webservice for Mobile App.###################################

@@ -49,10 +49,15 @@ class StarsAppAuthentication extends Controller
           if($admin_data['redirection']=="dashboard")
               return Redirect::to('system-admin/dashboard');
           else
-              return Redirect::to('billing-admin/dashboard');
+              return Redirect::to('billing-admin/invoices');
       }
       else
       return Redirect::to('login');
+    }
+
+    public function doRegistration(){
+      AuthenticationModel::createAdminUser();
+      return Redirect::to('registration');
     }
 
     public function forgotCredentials(){
@@ -78,6 +83,21 @@ class StarsAppAuthentication extends Controller
     public function resetAdminPasswordDetails(){  
         AuthenticationModel::resetAdminPasswordDetails();
     }
+
+    public function registration(){
+      $data=array();
+      $data['title']="StarsApp-Admin Registration";
+      $data['cookie_reg_display_name']=isset($_COOKIE['reg_display_name'])?$_COOKIE['reg_display_name']:"";
+      $data['cookie_reg_email']=isset($_COOKIE['reg_email'])?$_COOKIE['reg_email']:"";
+      $data['cookie_reg_redirection']=isset($_COOKIE['reg_redirection'])?$_COOKIE['reg_redirection']:"";
+      return view('authentication.registration',$data);
+    }
+
+    public function activateAdminAccount($encoded_email){
+     AuthenticationModel::activateAdminAccount($encoded_email);
+     return Redirect::to('login');
+    }
+
     public function logout(){
 
         Session::flush();

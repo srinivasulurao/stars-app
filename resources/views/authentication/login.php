@@ -22,7 +22,9 @@ endif;
 <div style='text-align:center;padding-top:20px;'>
 
 <span class='small' style='float:left'><input type='checkbox' <?php echo $cookie_remember_me; ?> name='remember_me' value='1'> <font class='little_top'>Remember Me</font></span>
-<a class='small' href='<?php echo Request::root(); ?>/forgot-credentials' style='float:right'>Forgot Password?</a><br><br>
+<a class='small' href='<?php echo Request::root(); ?>/forgot-credentials' style='float:right'>Forgot Password?</a><br>
+<a class='small' href='<?php echo Request::root(); ?>/registration' style='float:right'>New User? Register Here</a><br>
+<br>
 
 <button type='submit' name='canteen_login' style='clear:both' class='btn btn-success'>Sign In</button>
 </div>

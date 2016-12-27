@@ -1,6 +1,6 @@
 <?php
 $sidebarLinks=array();
-$sidebarLinks['Invoices']="/billing-admin/dashboard";
+$sidebarLinks['Invoices']="/billing-admin/invoices";
 $sidebarLinks["Pricing"]="/billing-admin/pricing";
 ?>
 

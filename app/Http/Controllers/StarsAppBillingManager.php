@@ -26,9 +26,14 @@ class StarsAppBillingManager extends Controller
 
       $data=array();
       $data['title']="StarsApp-Billing Backend";
-      $data['results']=AdminManagerModel::getAllDrivers();
+      $data['results']=BillingManagerModel::getAllInvoices();
       return view('billing.invoices',$data);
 
+    }
+
+    public static function generateInvoice(){
+      BillingManagerModel::generateInvoice();
+      return Redirect::to('billing-admin/invoices');
     }
 
     public static function pricing(){
@@ -64,6 +69,8 @@ class StarsAppBillingManager extends Controller
         BillingManagerModel::addDistrict();
         return Redirect::to("billing-admin/pricing");
     }
+
+
 
 
 }//Billing Controller Class Ends here.

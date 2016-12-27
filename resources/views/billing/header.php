@@ -46,7 +46,26 @@ body{
 }
 
 .profile-footer{
-	background:white !important;
+	background:#337AB7 !important;
+	color:ghostwhite;
+}
+
+.sidebar{
+	background: #1F272D !important;
+}
+.list-group-item{
+	background: transparent;
+}
+
+.list-group-item a{
+	text-decoration: none;
+}
+.menu-active,.list-group-item:hover{
+	background:#222C32 !important;
+}
+
+.list-group-item:hover a{
+	color:white;
 }
 
 </style>

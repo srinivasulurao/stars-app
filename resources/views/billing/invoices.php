@@ -22,23 +22,25 @@ echo View::make("billing.sidebar",array('active_link'=>'Invoices'))->render();
 
   //debug($accountDetail);
   ?>
-  <h1>Invoices  <a  href='<?php echo url("billing-admin/invoice/add"); ?>' class="btn btn-primary" style="float:right">Add Invoice</a> 
-  <a  href='javascript:void(0)' class="btn btn-primary" style="float:right;margin-right:10px;" data-toggle='modal' data-target='#uploadEntity'>Upload CSV File</a>
+  <h1>Invoices  <a  href='<?php echo url("billing-admin/invoice/generate-invoice"); ?>' class="btn btn-primary" style="float:right">Generate Invoice</a> 
+  <!-- <a  href='javascript:void(0)' class="btn btn-primary" style="float:right;margin-right:10px;" data-toggle='modal' data-target='#uploadEntity'>Upload CSV File</a>
   <a  href='<?php echo str_replace("/public/","/",url('uploads/mass-upload/driver_upload.csv')); ?>' download class="btn btn-primary" style="float:right;margin-right:10px;" >Sample CSV File</a>
-  </h1>
+ -->  </h1>
   <table class='table table-striped'>
-  <tr><th style='display:none'>Picture</th><th>First Name</th><th>Last Name</th><th>Campus</th><th>District</th><th> Description</th><th>Username</th><th style='display:none'>Email</th><th>Phone</th></th><th>Action</th></tr>
+  <tr><th>Date</th><th>Invoice #</th><th>District Name</th><th>TREA Member</th><th>Paid With</th><th>PO#</th><th>Invoice Amount</th><th>Amount Paid</th><th>Action</th></tr>
   <?php
   $root=Request::root();
   foreach($results as $key):
-    $pic_url=str_replace("/public","",Request::root().$key->profile_pic);
-    $pic="<img src='$pic_url' class='thumbnail' style='height:70px;width:70px;border-radius:50%'>";
-    $school=schoolName($key->school_id);
+    $invoice_date=date('m/d/Y',strtotime($key->invoice_date));
     $district=districtName($key->district_id);
-    $edit="<a href='$root/system-admin/driver/edit/{$key->driver_id}' class='btn btn-info'><i class='glyphicon glyphicon-edit'></i></a>";
-    $delete="<a data-toggle='modal' data-target='#deleteEntity'  href='javascript:void()' data-link='$root/system-admin/delete/drivers/drivers/driver_id/{$key->driver_id}' class='btn btn-danger delete_atrib'><i class='glyphicon glyphicon-trash'></i></a>";
-    $driver_description=($key->driver_description)?driverDescription($key->driver_description):"";
-  echo "<tr><td style='display:none'>$pic</td><td>{$key->first_name}</td><td> {$key->last_name}</td><td>{$school}</td><td>{$district}</td><td>$driver_description</td><td>{$key->username}</td><td style='display:none'>{$key->email}</td><td>{$key->phone}</td><td>$edit  $delete</td></tr>";
+    $invoice_amount=number_format($key->invoice_amount,2);
+    $amount_paid=number_format($key->amount_paid,2);
+    $payment_with=str_replace("_"," ",$key->payment_with);
+    $edit="<a href='$root/billing-admin/invoice/edit/{$key->invoice_id}'  class='btn btn-info'><i class='glyphicon glyphicon-euro'></i></a>";
+    $delete="<a data-toggle='modal' data-target='#deleteEntity'  href='javascript:void()' data-link='$root/billing-admin/delete/invoices/invoice/invoice_id/{$key->invoice_id}' class='btn btn-danger delete_atrib'><i class='glyphicon glyphicon-trash'></i></a>";
+
+    $trea_member=($key->trea_member)?"<span class='label label-success'>{$key->trea_member}</span>":"<span class='label label-danger'>{$key->trea_member}</span>";
+  echo "<tr><td>$invoice_date</td><td>#{$key->invoice_id}</td><td>$district<td>$trea_member</td><td>{$payment_with}</td><td>{$key->po_number}</td><td>{$invoice_amount}</td><td>{$amount_paid}</td><td>$edit $delete</td></tr>";
   endforeach;
   ?>
 </table>
